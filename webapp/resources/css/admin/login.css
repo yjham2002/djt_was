@@ -1,0 +1,285 @@
+/* ======================================== 
+    작성일     :   2011.05.13
+    작업자     :   이은영
+========================================== */
+
+*{margin:0; padding:0;}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary { 
+display: block; clear:both;
+	}
+body, input, textarea, select, button{ 
+font-family:"NanumGothic", "NanumGothicExtraBold", "NanumGothicBold";
+}
+img{border:0px;}
+
+table{border-collapse:collapse;}
+
+
+
+
+a{text-decoration:none;
+}
+
+a:hover{text-decoration:none;
+}
+a:active{text-decoration:none;
+}
+
+
+
+ul,li{list-style-type:none;}
+
+
+	
+.header{
+	padding  :100px 0px 5px 0px;
+	margin:auto auto;
+	width:580px;
+	
+	font-size:32px;
+	text-align:center;
+	font-weight:bold;
+	color:#004b82;	
+	
+	
+
+}
+
+.header span{
+
+	
+	font-size:28px;
+	text-align:center;
+	font-weight:bold;
+	color:#fff;
+	background:#004b82;
+	padding:0px 20px 0px 20px;
+	
+	border-radius:5px ;
+	-webkit-border-radius: 5px ;
+	-moz-border-radius: 5px ;
+	-o-border-radius: 5px ;
+	
+	
+
+}
+	
+	
+	
+.footer{
+	font-size:12px;
+	margin:0 auto;
+
+	height:20px;
+	text-align:center;
+	
+	padding: 15px 0px 15px 0px;
+	
+}	
+
+.footer span{color:#03528c; }
+
+
+.container{
+	background-color:#ffffff;
+	margin:0px ;
+	padding:0px 0px 0px 0px;
+	width:580px;
+	overflow:hidden;
+	margin:0 auto;
+	
+}
+
+.m{ width:580px;
+	
+	
+	padding: 15px 25px 15px 25px;
+	margin:0 auto;
+	border:#ccd9e2 3px solid;
+	
+
+	
+	background-color:#fff;
+	
+	border-radius:15px 0px 15px 0px ;
+	-webkit-border-radius: 15px 0px 15px 0px ;
+	-moz-border-radius: 15px 0px 15px 0px;
+	-o-border-radius: 15px 0px 15px 0px;
+
+	
+}
+
+
+
+
+
+
+h1{
+	font-size:24px;
+	color:#004b82;	
+	
+	margin:0 0 10px 0;
+	padding:0px 0 5px 0;
+	font-weight:bold;
+	
+	line-height:36px;
+	
+	
+	background-image:url(/NaeKkot/resources/imgs/admin/login/line_2.gif);
+	background-position:bottom;
+	background-repeat:no-repeat; 
+}
+
+h1 span{
+	float:right;
+	font-size:12px;
+	font-weight:normal;
+	color:#666666;
+	line-height:28px;
+	padding:10px 0 5px 0px ;
+	text-align:right;
+}
+
+	
+
+
+
+
+
+
+	
+	
+.data	{
+	width:580px;
+	
+
+	margin:0 auto;
+	padding:20px 0px 20px 0px;
+	}
+
+   .data th	{ 
+	color:#004b82;
+	font-weight:normal;
+	text-align:right ; 
+	font-size:12px;
+	vertical-align:top;
+	line-height:22px;
+	
+	width:190px;
+	
+	
+	padding:4px 5px 4px 0px ;
+	 
+	 } 
+	
+	
+	.data td	{
+		height: 18px; 
+		width:390px;
+		font-size:12px;  
+		color:#666666;
+		padding:2px 0px 2px 0px ; }
+
+
+
+
+
+
+
+
+	
+
+.button {
+  	
+  display: inline-block;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+
+  font-size: 14px;
+  padding: 5px 92px 5px 92px;
+  margin:10px 0px 0px 0px;
+  
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  border-radius:3px;
+ 
+}
+.button:hover {
+  text-decoration: none;
+}
+.button:active {
+  position: relative;
+  top: 1px;
+}
+
+
+
+
+.medium {
+	font-size: 12px;
+	padding: .4em 1.5em .42em;
+}
+.small {
+	font-size: 11px;
+	padding: 2px 6px 2px 6px;
+}
+.nsmall {
+	font-size: 11px;
+	padding:1px 12px 1px 12px;
+
+}
+.searchsmall {
+	font-size: 12px;
+	padding: 3px 12px 2px 12px;
+}
+
+
+/* color styles 
+---------------------------------------------- */
+
+/* navy */
+.navy {
+	color: #d9eef7;
+	border: solid 1px #0076a3;
+	background: #0083cd;
+	background: -webkit-gradient(linear, left top, left bottom, from(#0083cd), to(#1b4f9e));
+	background: -moz-linear-gradient(top,  #0083cd,  #1b4f9e);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0083cd', endColorstr='#1b4f9e');
+}
+.navy:hover {
+	background: #195bbe;
+	background: -webkit-gradient(linear, left top, left bottom, from(#1754b0), to(#195bbe));
+	background: -moz-linear-gradient(top,  #1754b0,  #195bbe);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#1754b0', endColorstr='#195bbe');
+}
+.navy:active {
+	color: #195bbe;
+	background: -webkit-gradient(linear, left top, left bottom, from(#1754b0), to(#195bbe));
+	background: -moz-linear-gradient(top,  #1754b0,  #195bbe);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#1754b0', endColorstr='#195bbe');
+}
+
+/* white */
+.white {
+	color: #606060;
+	border: solid 1px #b7b7b7;
+	background: #f5f5f5;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
+	background: -moz-linear-gradient(top,  #fff,  #ededed);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed');
+}
+.white:hover {
+	background: #ededed;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#dcdcdc));
+	background: -moz-linear-gradient(top,  #fff,  #dcdcdc);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dcdcdc');
+}
+.white:active {
+	color: #999;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#fff));
+	background: -moz-linear-gradient(top,  #ededed,  #fff);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#ffffff');
+}
+	

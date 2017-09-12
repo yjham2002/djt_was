@@ -1,0 +1,99 @@
+/* =============================================== 
+	�ۼ���		:	2013.06.10
+	�۾���		:	������
+==================================================  */
+@font-face {
+
+font-family: NanumGothic;
+
+
+src: local('NanumGothic'), local('NanumGothic Regular'), url('../font/NanumGothic.ttf') format('truetype');
+}
+
+@font-face {
+
+font-family: NanumGothicBold;
+
+
+src: local('NanumGothicBold'), local('NanumGothic Bold'), url('../font/NanumGothicBold.ttf') format('truetype');
+}
+
+
+
+
+html, body {height:100%; width:100%; margin:0; padding:0;}
+
+body, input, textarea, select, button{ 
+font-family:"NanumGothic",  "NanumGothicBold";
+}
+body {
+		font-size:12px;
+		font-family:font-family:"NanumGothic",  "NanumGothicBold";
+		color:#555;
+		
+		background-color:#f2f2f2;
+		background-image:url(/NaeKkot/resources/images/bg.png);
+	
+
+}
+
+
+
+h1, h2, h3, h4, h5, h6, dl, dt, dd, form, fieldset, p, label{
+		margin:0;
+		padding:0;
+		list-style:none;
+		color:#666;
+		font-weight:normal;
+        border:0;
+		font-size:1em;
+}
+
+a:link		{ text-decoration:none;}
+a:visited	{ text-decoration:none;}
+a:hover		{ text-decoration:none;}
+a:active	{ text-decoration:none;}
+
+
+div, ul, ol, li, p, tr, td, th,span,strong{
+		margin:0;
+		padding:0;
+		color:#525252;
+}
+
+ul, li {list-style:none;}
+
+img {border:0; padding:0; margin:0; vertical-align:top;display:inline-block; }
+
+
+
+
+
+table {border-collapse: collapse; border-spacing: 0;}
+
+input {border: expression( (this.type=='checkbox'||this.type=='radio')?'':'1px solid #dddddd' ); 
+	font-size:12px;
+	padding:3px 2px 3px 2px;
+	
+	 }
+.wt1{width:10px;  }	
+.wt2{width:20px;  }	
+.wt3{width:30px;  }	
+.wt4{width:40px;  }	
+.wt5{width:50px;  }	
+.wt6{width:60px;  }	
+.wt7{width:70px;  }
+.ws{width:100px;  }
+.wm{width:130px;  }	
+.wb{width:200px;  }	
+.w_ad{width:243px; padding-right:5px;  }			
+.wls{width:430px;  }
+.wl{width:450px;  }
+.hls{width:434px; height:130px; font-size:11px; }
+.hl{width:534px; height:80px; font-size:11px; }
+.hlb{width:734px; height:80px; font-size:11px; }
+.login{width:218px;  }	
+
+	
+
+.f_blue{ color:#1b4f9e; font-size:13px; font-weight:bold;}

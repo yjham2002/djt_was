@@ -1,0 +1,12 @@
+
+Quartz has started to run - 2017-03-10 23:00:00
+An error Occured - 2017-03-10 23:00:00 
+ StackTrace >> 
+org.springframework.dao.DataAccessResourceFailureException: 
+### Error querying database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException: Connection reset by peer: socket write error
+### The error may exist in file [C:\Users\a\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp2\wtpwebapps\djTalk\WEB-INF\classes\com\appg\djTalk\mybatis\external\query\ExCommMapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: select DEPT_CD AS no, DEPT_NM AS hangleName from COV_DEPT_TALK WHERE DEPT_CD LIKE '30%'
+### Cause: com.microsoft.sqlserver.jdbc.SQLServerException: Connection reset by peer: socket write error
+; SQL []; Connection reset by peer: socket write error; nested exception is com.microsoft.sqlserver.jdbc.SQLServerException: Connection reset by peer: socket write error

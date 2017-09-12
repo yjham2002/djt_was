@@ -1,0 +1,474 @@
+package com.appg.djTalk.service;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.appg.djTalk.common.bean.DataMap;
+import com.appg.djTalk.common.util.chat.ChatUtil;
+import com.appg.djTalk.mybatis.board.mapper.BoardMapper;
+import com.appg.djTalk.mybatis.core.mapper.CommMapper;
+import com.appg.djTalk.mybatis.external.mapper.ExCommMapper;
+
+@Service
+public class SvcQuartz {
+	@Autowired CommMapper commMapper;
+	@Autowired ExCommMapper exCommMapper;
+	@Autowired BoardMapper boardMapper;
+	
+	public static final String SERVER_AUTO_UID = "==+=_SERVER_AUTO_UID_DAJEON_HIT_TALK_=+==";
+	
+	public static final int MAX_GRADE = 3;
+	public static final int DAYNIGHT_NONE = 0;
+	public static final int DAYNIGHT_DAY = 0;
+	public static final int DAYNIGHT_NIGHT = 1;
+	
+	public static final String DAYNIGHT_DAY_STRING = "10";
+	public static final String DAYNIGHT_NIGHT_STRING = "20";
+	
+	public static final String ROOMTYPE_DEPARTMENT = "DP";
+	public static final String ROOMTYPE_SECTION = "DS";
+	public static final String ROOMTYPE_CLASS = "CL";
+	public static final String ROOMTYPE_COUNSELLING = "CO";
+	
+	public class Room{
+		public String type = "", pref_dept = "", pref_section = "", pref_class = "", pref_daynight = "", roomId = "";
+		public int pref_grade = 0, room_no = 0;
+		
+		public Room(){}
+		
+		public Room(String type, String pref_dept, String pref_section, String pref_class, int pref_daynight, int pref_grade) {
+			this.type = type;
+			this.pref_dept = pref_dept;
+			this.pref_section = pref_section;
+			this.pref_class = pref_class;
+			this.pref_grade = pref_grade;
+			
+			if(pref_daynight == DAYNIGHT_DAY) this.pref_daynight = DAYNIGHT_DAY_STRING;
+			else if(pref_daynight == DAYNIGHT_NIGHT) this.pref_daynight = DAYNIGHT_NIGHT_STRING;
+			else this.pref_daynight = "";
+		}
+		
+		
+	}
+	
+	public class ChatMember{
+		public String device = "";
+		public int room = 0;
+		public ChatMember(){}
+		public ChatMember(String device, int room){
+			this.device = device;
+			this.room = room;
+		}
+		public String getHashCode(){
+			return device + "#" + room + "#HASH_CODE#";
+		}
+	}
+	
+	public String removeHtml(String source){
+		return source
+				.replaceAll("<br>", "\n")
+				.replaceAll("<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>", "")
+				.replaceAll("&nbsp;", " ")
+				.replaceAll("&nbsp", " ")
+				.replaceAll("<!--StartFragment-->", "\n");
+	}
+	
+	public void retrieveBoard(){
+		int maxSeq = commMapper.getMaxSequence();
+		List<DataMap> list = boardMapper.getListOfBoard(maxSeq);
+		
+		for(DataMap map : list){
+			
+			System.out.println("[debug] :: " + map);
+			
+			int seq = map.getInt("SEQ");
+			String contents = map.getString("CONTENTS");
+			String target = map.getString("TARGETCODE");
+			
+			DataMap params = new DataMap();
+			
+			params.put("title", "guidance");
+			params.put("content", removeHtml(contents));
+			params.put("seq", seq);
+			
+			// commMapper.insertBoard(params);
+		}
+		
+	}
+	
+	public void retrieveNotice(){
+		int maxSeq = commMapper.getMaxSequence();
+		List<DataMap> list = boardMapper.getListOfBoard(maxSeq);
+		
+		for(DataMap map : list){
+			
+			System.out.println("[debug] :: " + map);
+			
+			int seq = map.getInt("SEQ");
+			String contents = map.getString("CONTENTS");
+			String target = map.getString("TARGETCODE");
+			
+			DataMap params = new DataMap();
+			
+			params.put("title", "notice");
+			params.put("content", removeHtml(contents));
+			params.put("seq", seq);
+			
+			commMapper.insertBoard(params);
+		}
+		
+	}
+	
+	public boolean syncHitChatData(){
+		
+		System.out.println(" * ROOM SYNCHRONIZING STARTED * ");
+		
+		//synchronizeChatState();
+		
+		retrieveBoard();
+		//retrieveNotice();
+				
+		//ChatUtil.creatTeamRoom(SERVER_AUTO_UID, new String[]{SERVER_AUTO_TEAM_UID});
+		
+		// TODO It is necessary to join auto_server after creating the room
+		
+		//ChatUtil.sendMessage(SERVER_AUTO_UID, "AAAAAgAAAAAACWFzZGZzZGFmYQAJYXNkZnNkYWZh", "M", ChatUtil.makeMsgJsonData("Hello! World!" + new Random().nextInt(1000), ChatConstants.MSG_TYPE_TEXT));
+		//ChatUtil.sendMessage(SERVER_AUTO_UID, "AAAAAAAAAAAABZ6+7LMUpck+0k72YwABdGVzdA==", "M", ChatUtil.makeMsgJsonData("Hello! World!" + new Random().nextInt(1000), ChatConstants.MSG_TYPE_TEXT));
+		//ChatUtil.sendMessage(SERVER_AUTO_UID, "AAAAAAAAAAAABZ6+7LMUpclNlqoF4AABdGVzdGE=", "M", ChatUtil.makeMsgJsonData("Hello! World!" + new Random().nextInt(1000), ChatConstants.MSG_TYPE_TEXT));
+		
+		//ChatUtil.sendMessage(SERVER_AUTO_UID, "AAAAAgAAAAAACWFzZGZzZGFmYQAJYXNkZnNkYWZh", "M", ChatUtil.makeMsgJsonData("Hello! World!" + "Last Message of Zh", ChatConstants.MSG_TYPE_TEXT));
+		//ChatUtil.sendMessage(SERVER_AUTO_UID, "AAAAAAAAAAAABZ6+7LMUpck+0k72YwABdGVzdA==", "M", ChatUtil.makeMsgJsonData("Hello! World!" + "Last Message of ==", ChatConstants.MSG_TYPE_TEXT));
+		//ChatUtil.sendMessage(SERVER_AUTO_UID, "AAAAAAAAAAAABZ6+7LMUpclNlqoF4AABdGVzdGE=", "M", ChatUtil.makeMsgJsonData("Hello! World!" + "Last Message of E=", ChatConstants.MSG_TYPE_TEXT));
+		
+		return false;
+	}
+	
+	public void joinMember(String roomId, String[] memuids){
+		if(ChatUtil.joinMember(SERVER_AUTO_UID, roomId, memuids, false)){
+			int roomNo = commMapper.getRoomNumber(roomId);
+			for(String s : memuids) commMapper.setMember(roomNo, s);
+			System.out.println("Joining Member Succeeded.");
+		}else{
+		System.out.println("Joining Member Failed.");
+		}
+	}
+	
+	public void unjoinMember(String roomId, String memuid){
+		if(ChatUtil.unjoinMember(SERVER_AUTO_UID, roomId, new String[]{memuid}, false)){
+			int roomNo = commMapper.getRoomNumber(roomId);
+			commMapper.deleteSpecMember(roomNo, memuid);
+			System.out.println("Joining Member Succeeded.");
+		}else{
+		System.out.println("Unjoining Member Failed.");
+		}
+	}
+	
+	public void synchronizeChatState(){
+		
+		List<Room> currents = new ArrayList<Room>();
+		List<Room> existings = new ArrayList<Room>();
+		
+		Set<String> hashFilter = new HashSet<String>();
+		Set<String> hashFilterReverse = new HashSet<String>();
+		
+		List<DataMap> depts = exCommMapper.getDepts();
+		List<DataMap> lects = exCommMapper.getLectures();
+		List<DataMap> currentRooms = commMapper.getCurrentRooms();
+		
+		for(DataMap m : depts) {
+			currents.add(RawToRoom(m, ROOMTYPE_DEPARTMENT));
+			hashFilter.add(createRoomHash(ROOMTYPE_DEPARTMENT, m.getString("no"), "", "", 0, DAYNIGHT_NONE));
+		}
+		
+		for(DataMap m : depts) {
+			for(int i = 1; i <= 4; i++){
+				hashFilter.add(createRoomHash(ROOMTYPE_SECTION, m.getString("no"), "A", "", i, DAYNIGHT_DAY));
+				currents.add(new Room(ROOMTYPE_SECTION, m.getString("no"), "A", "", DAYNIGHT_DAY, i));
+				hashFilter.add(createRoomHash(ROOMTYPE_SECTION, m.getString("no"), "A", "", i, DAYNIGHT_NIGHT));
+				currents.add(new Room(ROOMTYPE_SECTION, m.getString("no"), "A", "", DAYNIGHT_NIGHT, i));
+				hashFilter.add(createRoomHash(ROOMTYPE_SECTION, m.getString("no"), "B", "", i, DAYNIGHT_DAY));
+				currents.add(new Room(ROOMTYPE_SECTION, m.getString("no"), "B", "", DAYNIGHT_DAY, i));
+				hashFilter.add(createRoomHash(ROOMTYPE_SECTION, m.getString("no"), "B", "", i, DAYNIGHT_NIGHT));
+				currents.add(new Room(ROOMTYPE_SECTION, m.getString("no"), "B", "", DAYNIGHT_NIGHT, i));
+				hashFilter.add(createRoomHash(ROOMTYPE_SECTION, m.getString("no"), "C", "", i, DAYNIGHT_DAY));
+				currents.add(new Room(ROOMTYPE_SECTION, m.getString("no"), "C", "", DAYNIGHT_DAY, i));
+				hashFilter.add(createRoomHash(ROOMTYPE_SECTION, m.getString("no"), "C", "", i, DAYNIGHT_NIGHT));
+				currents.add(new Room(ROOMTYPE_SECTION, m.getString("no"), "C", "", DAYNIGHT_NIGHT, i));
+				hashFilter.add(createRoomHash(ROOMTYPE_SECTION, m.getString("no"), "D", "", i, DAYNIGHT_DAY));
+				currents.add(new Room(ROOMTYPE_SECTION, m.getString("no"), "D", "", DAYNIGHT_DAY, i));
+				hashFilter.add(createRoomHash(ROOMTYPE_SECTION, m.getString("no"), "D", "", i, DAYNIGHT_NIGHT));
+				currents.add(new Room(ROOMTYPE_SECTION, m.getString("no"), "D", "", DAYNIGHT_NIGHT, i));
+			}
+		}
+		
+		for(DataMap m : lects) {
+			currents.add(RawToRoom(m, ROOMTYPE_CLASS));
+			hashFilter.add(createRoomHash(ROOMTYPE_CLASS, "", "", m.getString("classcode"), 0, DAYNIGHT_NONE));
+		}
+	
+		for(DataMap m : currentRooms) {
+			Room room = dataMaptoRoom(m);
+			existings.add(room);
+			hashFilterReverse.add(createRoomHash(room.type, room.pref_dept, room.pref_section, room.pref_class, room.pref_grade, room.pref_grade));
+		}
+		
+		for(Room room : currents){ // Room Lists which have to exist 
+			if(!hashFilterReverse.contains(createRoomHash(room.type, room.pref_dept, room.pref_section, room.pref_class, room.pref_grade, room.pref_grade))){
+				String memuids[] = null;
+				String rid = null;
+				
+				System.out.println("Quartz Job - Trying to create new Room.");
+				
+				switch(room.type){
+				case ROOMTYPE_SECTION : case ROOMTYPE_CLASS : case ROOMTYPE_DEPARTMENT :
+					
+					//memuids = new String[]{SERVER_AUTO_UID};
+					memuids = new String[]{};
+					
+					rid = ChatUtil.creatTeamRoom(SERVER_AUTO_UID, memuids, room.type);
+					if(rid == null) System.out.println("-----> Creating Job Failed.");
+					else {
+						System.out.println("-----> Creating Job Succeeded.");
+						String roomDesc = createRoomDescription(room.type, room.pref_dept, room.pref_section, room.pref_class, room.pref_grade, getIntOfDaynight(room.pref_daynight));
+						createNewRoomInDB(roomDesc, rid, room.type, room.pref_dept, room.pref_section, room.pref_class, room.pref_daynight, room.pref_grade);
+						
+					}
+					
+					break;
+				case ROOMTYPE_COUNSELLING: default : break; // Do nothing
+				}
+				
+			} // Create New room if it does not exist
+			
+
+			
+		}
+		
+		Set<String> hashFilterForMember = new HashSet<String>();
+		Set<String> hashFilterForMemberReverse = new HashSet<String>();
+		
+		currentRooms = commMapper.getCurrentRooms();
+		
+		// synchronizing Members - Add
+		for(DataMap m : currentRooms){
+			hashFilterForMember.clear();
+			hashFilterForMemberReverse.clear();
+			
+			int roomNo = m.getInt("no");
+			
+			List<DataMap> chatMemberPair = commMapper.getChatMemberPair(roomNo);
+			
+			for(DataMap chatMember : chatMemberPair){
+				hashFilterForMember.add(new ChatMember(chatMember.getString("device_f"), roomNo).getHashCode());
+			}
+			
+			String roomId = m.getString("roomId");
+			String memuids[] = new String[]{};
+			
+			List<String> arr = new ArrayList<String>();
+			
+			// TODO optional - filtering (Need to be considered)
+			
+			List<DataMap> list = null;
+			
+			switch(m.getString("type")){
+			case ROOMTYPE_CLASS:
+				list = exCommMapper.getCourseTaker(m.getString("pref_class"));
+				break;
+			case ROOMTYPE_DEPARTMENT: 
+				list = exCommMapper.getDeptMember(m.getString("pref_dept"));
+				break;
+			case ROOMTYPE_SECTION: 
+				list = exCommMapper.getSectionMember(m.getString("pref_dept"), m.getInt("pref_grade"), m.getString("pref_section"), m.getString("pref_daynight"));			
+				break;
+			case ROOMTYPE_COUNSELLING: default: break; // Do nothing
+			}
+			
+			for(DataMap map : list){
+				arr.add(map.getString("memberId"));
+				hashFilterForMemberReverse.add(new ChatMember(map.getString("memberId"), roomNo).getHashCode());
+			}
+			
+			memuids = arr.toArray(new String[arr.size()]);
+			
+			for(int i = 0; i < arr.size(); i++){
+				if(hashFilterForMember.contains(new ChatMember(arr.get(i), roomNo).hashCode())) arr.remove(i);
+			}
+			
+			if(memuids.length != 0) joinMember(roomId, memuids);
+			
+			List<DataMap> chatMemberPairs = commMapper.getChatMemberPair(roomNo);
+			
+			for(DataMap chatMemberReverse : chatMemberPairs){
+				if(!hashFilterForMemberReverse.contains(new ChatMember(chatMemberReverse.getString("device_f"), chatMemberReverse.getInt("room_f")).getHashCode()))
+					unjoinMember(roomId, chatMemberReverse.getString("device_f"));
+			}
+			
+		}
+		// Synchronizing Member - end
+		
+		for(Room room : existings){
+			if(!hashFilter.contains(createRoomHash(room.type, room.pref_dept, room.pref_section, room.pref_class, room.pref_grade, room.pref_grade))){
+				String rid = room.roomId; 
+				System.out.println("Quartz Job - Trying to delete the room which has " + rid + " as RoomID.");
+		
+				if(ChatUtil.destroyRoom(rid)) {
+					if(!room.type.equals(ROOMTYPE_COUNSELLING)) {
+						commMapper.deleteMember(rid);
+						commMapper.deleteRoom(rid);
+					}
+					System.out.println("-----> Deleting Job Succeeded.");
+				}else{
+					System.out.println("-----> Deleting Job Failed.");
+				}
+
+			}
+		}
+		
+		currentRooms = commMapper.getCurrentRooms();
+		for(DataMap m : currentRooms){
+			ChatUtil.unjoinMember(SERVER_AUTO_UID, m.getString("roomId"), new String[]{SERVER_AUTO_UID}, false);
+		}
+		
+
+	}
+	
+	public String getTextOfDaynight(int pref_daynight){
+		if(pref_daynight == DAYNIGHT_DAY) return DAYNIGHT_DAY_STRING;
+		else if(pref_daynight == DAYNIGHT_NIGHT) return DAYNIGHT_NIGHT_STRING;
+		else return "";
+	}
+	
+	public int getIntOfDaynight(String pref_daynight){
+		if(pref_daynight.equals("10")) return DAYNIGHT_DAY;
+		else if(pref_daynight.equals("20")) return DAYNIGHT_NIGHT;
+		else return DAYNIGHT_NONE;
+	}
+	
+	public void createNewRoomInDB(String desc, String roomId, String type, String pref_dept, String pref_section, String pref_class, String pref_daynight, int grade){
+		DataMap params = new DataMap();
+		params.put("desc", desc);
+		params.put("roomId", roomId);
+		params.put("type", type);
+		params.put("pref_dept", pref_dept);
+		params.put("pref_section", pref_section);
+		params.put("pref_class", pref_class);
+		params.put("pref_daynight", pref_daynight);
+		params.put("pref_grade", grade);
+		
+		commMapper.createRoom(params);
+		
+	}
+	
+	public int getRoomNumber(String rid){
+		int no = commMapper.getRoomNumber(rid);
+		return no;
+	}
+	
+	public Room RawToRoom(DataMap map, String roomType){
+		Room room = new Room();
+				
+		room.type = roomType;
+		
+		switch(roomType){
+		case ROOMTYPE_CLASS:
+			room.pref_dept = "";
+			room.pref_section = "";
+			room.pref_class = map.getString("classcode") != null ? map.getString("classcode") : "";
+			room.pref_daynight = "";
+			room.pref_grade = 0;
+			break;
+		case ROOMTYPE_DEPARTMENT:
+			room.pref_dept = map.getString("no") != null ? map.getString("no") : "";
+			room.pref_section = "";
+			room.pref_class = "";
+			room.pref_daynight = "";
+			room.pref_grade = 0;
+			break;
+		case ROOMTYPE_SECTION:
+			room.pref_dept = map.getString("no") != null ? map.getString("no") : "";
+			room.pref_section = map.getString("pref_section") != null ? map.getString("pref_section") : "";
+			room.pref_class = "";
+			room.pref_daynight = map.getString("pref_daynight") != null ? map.getString("pref_daynight") : "";
+			room.pref_grade = map.get("pref_grade") != null ? map.getInt("pref_grade") : 0;
+			break;
+		case ROOMTYPE_COUNSELLING: default : return room;
+				
+		}
+		
+		return room;
+	}
+	
+	public Room dataMaptoRoom(DataMap map){
+		Room room = new Room();
+		
+		if(map.getString("type").equals(ROOMTYPE_COUNSELLING)) return room;
+		
+		room.room_no = map.getInt("no");
+		room.type = map.getString("type");
+		room.pref_dept = map.getString("pref_dept") != null ? map.getString("pref_dept") : "";
+		room.pref_section = map.getString("pref_section") != null ? map.getString("pref_section") : "";
+		room.pref_class = map.getString("pref_class") != null ? map.getString("pref_class") : "";
+		room.pref_daynight = map.getString("pref_daynight") != null ? map.getString("pref_daynight") : "";
+		room.pref_grade = map.getInt("pref_grade");
+		room.roomId = map.getString("roomId");
+		
+		return room;
+	}
+	
+	public String createRoomHash(String type, String dept, String section, String classcode, int grade, int dayNight){
+		String roomDesc = ""; 
+		
+		switch(type){
+		case ROOMTYPE_DEPARTMENT : 
+			roomDesc = "DEPTCODE_HASH_" + dept + "_DEPT_HASH_";
+			break;
+		case ROOMTYPE_SECTION :
+			String dn = dayNight == 0 ? "DAY" : "NIGHT";
+			roomDesc = "DEPTCODE_HASH_"+ dept + "SECTIONHASH" + grade + "_SECTION_HASH_" + dn + "_SECTION_HASH_" + section;
+			break;
+		case ROOMTYPE_CLASS : 
+			roomDesc = "CLASSCODE_HASH_"+ classcode + "_CLASS_HASH_";
+			break;
+		case ROOMTYPE_COUNSELLING :  
+			roomDesc = "_COUNSELLING_ROOM_CANNOT_BE_NAMED_WITH_THIS_PROCESS_ERROR_";
+			break;
+		default : roomDesc = "_NO_DESC_"; break;
+		}
+		
+		System.out.println("QUARTZ JOB : createRoomHash - " + roomDesc);
+		
+		return roomDesc;
+	}
+	
+	public String createRoomDescription(String type, String dept, String section, String classcode, int grade, int dayNight){
+		String roomDesc = ""; 
+		
+		switch(type){
+		case ROOMTYPE_DEPARTMENT : 
+			roomDesc = exCommMapper.getDeptName(dept);
+			break;
+		case ROOMTYPE_SECTION :
+			String dn = dayNight == 0 ? "주간" : "야간";
+			roomDesc = exCommMapper.getDeptName(dept) + " " + grade + "학년 " + dn + " " + section + "반";
+			break;
+		case ROOMTYPE_CLASS : 
+			roomDesc = exCommMapper.getClassName(classcode);
+			break;
+		case ROOMTYPE_COUNSELLING :  
+			roomDesc = "_COUNSELLING_ROOM_CANNOT_BE_NAMED_WITH_THIS_PROCESS_ERROR_";
+			break;
+		default : roomDesc = "_NO_DESC_"; break;
+		}
+		
+		System.out.println("QUARTZ JOB : createRoomDescription - " + roomDesc);
+		
+		return roomDesc;
+	}
+	
+}

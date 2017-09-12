@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.appg.djTalk.mybatis.sms.mapper.ExCommMapper">
+
+	<select id="getDynamicSender" resultType="DataMap">
+		SELECT TOP(1) * FROM [dbo].[MSG_HIT_TALK]
+	</select>
+
+	<insert id="sendSMS">
+	 INSERT INTO NPRO.DBO.MSG_DATA(
+	 CUR_STATE, 
+	 REQ_DATE, 
+	 CALL_TO, 
+	 CALL_FROM, 
+	 SMS_TXT, 
+	 MSG_TYPE, 
+	 GROUP_SEQ, 
+	 SEQ, 
+	 SEND_SYSTEM, 
+	 SEND_IP, 
+	 SENDER, 
+	 SENDER_DEPT, 
+	 RECEIVER, 
+	 RECEIVER_DEPT, 
+	 BIZ_CD, 
+	 PGMID
+	 )
+    VALUES(
+    	0, 
+    	getDate(), 
+    	#{phone}, 
+    	#{callfrom}, 
+    	#{msg}, 
+    	4, 
+    	NULL, 
+    	NULL, 
+    	#{sendsys}, 
+    	#{local}, 
+    	#{sender}, 
+    	#{senderdept}, 
+    	#{memberId}, 
+    	#{dept}, 
+    	#{biz}, 
+    	#{pgmid}
+    	)
+	</insert>
+
+</mapper>

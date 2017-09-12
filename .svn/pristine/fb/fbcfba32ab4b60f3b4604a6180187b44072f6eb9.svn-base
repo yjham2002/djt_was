@@ -1,0 +1,12 @@
+
+Quartz has started to run - 2017-03-25 11:00:00
+An error Occured - 2017-03-25 11:00:19 
+ StackTrace >> 
+org.springframework.dao.DataAccessResourceFailureException: 
+### Error querying database.  Cause: java.sql.SQLRecoverableException: IO 오류: Socket read timed out
+### The error may exist in file [C:\Users\a\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp2\wtpwebapps\djTalk\WEB-INF\classes\com\appg\djTalk\mybatis\board\query\BoardMapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT SEQ, CONTENTS, CAST(TARGETCODE AS CHAR(3)) AS TARGETCODE, REGDATE FROM NOTIFY_01    WHERE BBSID='guidance' AND (TARGETCODE='001' OR TARGETCODE='002') AND SEQ > ? ORDER BY SEQ
+### Cause: java.sql.SQLRecoverableException: IO 오류: Socket read timed out
+; SQL []; IO 오류: Socket read timed out; nested exception is java.sql.SQLRecoverableException: IO 오류: Socket read timed out

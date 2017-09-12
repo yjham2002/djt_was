@@ -1,0 +1,26 @@
+
+Quartz has started to run[Attendance] - 2017-04-04 14:23:10
+Quartz has done normally[Attendance] - 2017-04-04 14:23:14
+Quartz has started to run[Birth] - 2017-04-04 14:23:30
+Quartz has done normally[Birth] - 2017-04-04 14:23:30
+Quartz has started to run[Cyber] - 2017-04-04 14:23:50
+Quartz has done normally[Cyber] - 2017-04-04 14:23:51
+Quartz has started to run[Sync] - 2017-04-04 18:09:00
+An error Occured[Sync] - 2017-04-04 18:36:25 
+ StackTrace >> 
+org.springframework.dao.DataAccessResourceFailureException: 
+### Error querying database.  Cause: java.sql.SQLRecoverableException: IO 오류: Socket read timed out
+### The error may exist in file [C:\Users\a\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp2\wtpwebapps\djTalk\WEB-INF\classes\com\appg\djTalk\mybatis\board\query\BoardMapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT SEQ, CONTENTS, CAST(TARGETCODE AS CHAR(3)) AS TARGETCODE, REGDATE FROM NOTIFY_01    WHERE BBSID='guidance' AND (TARGETCODE='001' OR TARGETCODE='002') AND SEQ > ? ORDER BY SEQ
+### Cause: java.sql.SQLRecoverableException: IO 오류: Socket read timed out
+; SQL []; IO 오류: Socket read timed out; nested exception is java.sql.SQLRecoverableException: IO 오류: Socket read timed out
+Quartz has started to run[Cyber] - 2017-04-04 19:01:00
+Quartz has started to run[Birth] - 2017-04-04 19:01:00
+Quartz has started to run[Attendance] - 2017-04-04 19:01:00
+Quartz has done normally[Birth] - 2017-04-04 19:01:00
+Quartz has done normally[Cyber] - 2017-04-04 19:01:01
+Quartz has done normally[Attendance] - 2017-04-04 19:01:03
+Quartz has started to run[Cyber] - 2017-04-04 19:06:00
+Quartz has done normally[Cyber] - 2017-04-04 19:06:01

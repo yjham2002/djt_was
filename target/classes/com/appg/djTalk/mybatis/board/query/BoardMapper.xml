@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.appg.djTalk.mybatis.board.mapper.BoardMapper">
+
+<!-- 
+	<select id="getListOfBoard" resultMap="getClobContents">
+		SELECT SEQ, CONTENTS, CAST(TARGETCODE AS CHAR(3)) AS TARGETCODE, REGDATE FROM NOTIFY_01 
+		WHERE BBSID='guidance' AND (TARGETCODE='001' OR TARGETCODE='002') AND SEQ > #{seq} ORDER BY SEQ
+	</select>
+	
+	<select id="getListOfNotice" resultMap="getClobContents">
+		SELECT SEQ, CONTENTS, REGDATE FROM NOTIFY_NOTIFY
+		WHERE BBSID='notice' AND SEQ > #{seq} ORDER BY SEQ
+	</select>
+ -->
+	
+	<select id="getListOfBoard" resultType="DataMap">
+		SELECT
+		  boardNo AS SEQ,
+		  boardContent AS CONTENTS,
+		  CONCAT('00', categoryNo) AS TARGETCODE,
+		  regDate AS REGDATE
+		FROM tblMainBoard
+		WHERE (categoryNo = 2 OR categoryNo = 3) AND boardNo > #{seq} AND useYn='Y'
+		ORDER BY boardNo
+	</select>
+	
+	<select id="getListOfNotice" resultType="DataMap">
+		SELECT 
+		  boardNo AS SEQ, 
+		  boardContent AS CONTENTS, 
+		  regDate AS REGDATE 
+		FROM tblMainBoard 
+		WHERE categoryNo = 1 AND boardNo > #{seq} AND useYn='Y'
+		ORDER BY boardNo
+	</select>
+
+	<select id = "testQuery" resultType = "int">
+		SELECT 1 FROM DUAL
+	</select>
+	<!-- Previous -->
+	
+	<resultMap type="DataMap" id="getClobContents">
+		<result property="CONTENTS"  column="CONTENTS"  jdbcType="CLOB" javaType="java.lang.String" />
+	</resultMap>
+
+
+</mapper>

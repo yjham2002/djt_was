@@ -1,0 +1,358 @@
+
+Quartz has started to run - 2017-03-07 00:47:00
+Quartz has done normally - 2017-03-07 01:13:53
+Quartz has started to run - 2017-03-07 01:46:52
+An error Occured - 2017-03-07 01:53:53 
+ StackTrace >> 
+java.lang.NullPointerException
+Quartz has started to run - 2017-03-07 02:46:00
+An error Occured - 2017-03-07 02:48:08 
+ StackTrace >> 
+java.lang.NullPointerException
+Quartz has started to run - 2017-03-07 03:46:00
+An error Occured - 2017-03-07 04:23:14 
+ StackTrace >> 
+java.lang.NullPointerException
+Quartz has started to run - 2017-03-07 04:46:00
+An error Occured - 2017-03-07 04:58:13 
+ StackTrace >> 
+java.lang.NullPointerException
+Quartz has started to run - 2017-03-07 05:46:00
+Quartz has done normally - 2017-03-07 06:03:34
+Quartz has started to run - 2017-03-07 06:46:00
+An error Occured - 2017-03-07 06:52:11 
+ StackTrace >> 
+java.lang.NullPointerException
+Quartz has started to run - 2017-03-07 07:46:00
+An error Occured - 2017-03-07 07:51:55 
+ StackTrace >> 
+java.lang.NullPointerException
+Quartz has started to run - 2017-03-07 09:46:00
+Quartz has done normally - 2017-03-07 09:56:43
+Quartz has started to run - 2017-03-07 10:46:00
+Quartz has started to run - 2017-03-07 11:46:00
+An error Occured - 2017-03-07 11:52:32 
+ StackTrace >> 
+org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.exceptions.PersistenceException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is java.sql.SQLException: Data source is closed
+### The error may exist in file [C:\Users\a\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp2\wtpwebapps\djTalk\WEB-INF\classes\com\appg\djTalk\mybatis\core\query\CommMapper.xml]
+### The error may involve com.appg.djTalk.mybatis.core.mapper.CommMapper.getChatMemberPair
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is java.sql.SQLException: Data source is closed
+Quartz has started to run - 2017-03-07 12:46:00
+Quartz has done normally - 2017-03-07 13:12:47
+Quartz has started to run - 2017-03-07 13:46:00
+Quartz has started to run - 2017-03-07 13:55:00
+Quartz has done normally - 2017-03-07 14:15:02
+Quartz has started to run - 2017-03-07 14:40:00
+Quartz has started to run - 2017-03-07 14:54:00
+Quartz has done normally - 2017-03-07 14:54:12
+Quartz has started to run - 2017-03-07 15:13:00
+Quartz has done normally - 2017-03-07 15:13:06
+Quartz has started to run - 2017-03-07 15:14:00
+Quartz has done normally - 2017-03-07 15:14:05
+Quartz has started to run - 2017-03-07 15:15:00
+Quartz has done normally - 2017-03-07 15:15:05
+Quartz has started to run - 2017-03-07 15:16:00
+Quartz has done normally - 2017-03-07 15:16:05
+Quartz has started to run - 2017-03-07 15:17:00
+Quartz has done normally - 2017-03-07 15:17:05
+Quartz has started to run - 2017-03-07 15:18:00
+Quartz has done normally - 2017-03-07 15:18:06
+Quartz has started to run - 2017-03-07 15:19:00
+Quartz has done normally - 2017-03-07 15:19:05
+Quartz has started to run - 2017-03-07 15:20:00
+Quartz has done normally - 2017-03-07 15:20:05
+Quartz has started to run - 2017-03-07 15:21:00
+Quartz has done normally - 2017-03-07 15:21:05
+Quartz has started to run - 2017-03-07 15:22:00
+Quartz has done normally - 2017-03-07 15:22:05
+Quartz has started to run - 2017-03-07 15:23:00
+Quartz has done normally - 2017-03-07 15:23:05
+Quartz has started to run - 2017-03-07 15:24:00
+Quartz has done normally - 2017-03-07 15:24:06
+Quartz has started to run - 2017-03-07 15:25:00
+Quartz has done normally - 2017-03-07 15:25:06
+Quartz has started to run - 2017-03-07 15:26:00
+Quartz has done normally - 2017-03-07 15:26:06
+Quartz has started to run - 2017-03-07 15:27:00
+Quartz has done normally - 2017-03-07 15:27:05
+Quartz has started to run - 2017-03-07 15:28:00
+Quartz has done normally - 2017-03-07 15:28:05
+Quartz has started to run - 2017-03-07 15:29:00
+Quartz has done normally - 2017-03-07 15:29:05
+Quartz has started to run - 2017-03-07 15:30:00
+Quartz has done normally - 2017-03-07 15:30:05
+Quartz has started to run - 2017-03-07 15:31:00
+Quartz has done normally - 2017-03-07 15:31:05
+Quartz has started to run - 2017-03-07 15:32:00
+Quartz has done normally - 2017-03-07 15:32:05
+Quartz has started to run - 2017-03-07 15:33:00
+Quartz has done normally - 2017-03-07 15:33:05
+Quartz has started to run - 2017-03-07 15:34:00
+Quartz has done normally - 2017-03-07 15:34:05
+Quartz has started to run - 2017-03-07 15:35:00
+Quartz has done normally - 2017-03-07 15:35:05
+Quartz has started to run - 2017-03-07 15:36:00
+Quartz has done normally - 2017-03-07 15:36:06
+Quartz has started to run - 2017-03-07 15:37:00
+Quartz has done normally - 2017-03-07 15:37:05
+Quartz has started to run - 2017-03-07 15:38:00
+Quartz has done normally - 2017-03-07 15:38:05
+Quartz has started to run - 2017-03-07 15:39:00
+Quartz has done normally - 2017-03-07 15:39:05
+Quartz has started to run - 2017-03-07 15:40:00
+Quartz has done normally - 2017-03-07 15:40:05
+Quartz has started to run - 2017-03-07 15:41:00
+Quartz has done normally - 2017-03-07 15:41:06
+Quartz has started to run - 2017-03-07 15:42:00
+Quartz has done normally - 2017-03-07 15:42:06
+Quartz has started to run - 2017-03-07 15:43:00
+Quartz has done normally - 2017-03-07 15:43:06
+Quartz has started to run - 2017-03-07 15:44:00
+Quartz has done normally - 2017-03-07 15:44:05
+Quartz has started to run - 2017-03-07 15:45:00
+Quartz has done normally - 2017-03-07 15:45:05
+Quartz has started to run - 2017-03-07 15:46:00
+Quartz has done normally - 2017-03-07 15:46:05
+Quartz has started to run - 2017-03-07 15:47:00
+Quartz has done normally - 2017-03-07 15:47:05
+Quartz has started to run - 2017-03-07 15:48:00
+Quartz has done normally - 2017-03-07 15:48:05
+Quartz has started to run - 2017-03-07 15:49:00
+Quartz has done normally - 2017-03-07 15:49:05
+Quartz has started to run - 2017-03-07 15:50:00
+Quartz has done normally - 2017-03-07 15:50:05
+Quartz has started to run - 2017-03-07 15:51:00
+Quartz has done normally - 2017-03-07 15:51:05
+Quartz has started to run - 2017-03-07 15:52:00
+Quartz has done normally - 2017-03-07 15:52:05
+Quartz has started to run - 2017-03-07 15:53:00
+Quartz has done normally - 2017-03-07 15:53:05
+Quartz has started to run - 2017-03-07 15:54:00
+Quartz has done normally - 2017-03-07 15:54:05
+Quartz has started to run - 2017-03-07 15:55:00
+Quartz has done normally - 2017-03-07 15:55:06
+Quartz has started to run - 2017-03-07 15:56:00
+Quartz has done normally - 2017-03-07 15:56:05
+Quartz has started to run - 2017-03-07 15:57:00
+Quartz has done normally - 2017-03-07 15:57:06
+Quartz has started to run - 2017-03-07 15:58:00
+Quartz has done normally - 2017-03-07 15:58:05
+Quartz has started to run - 2017-03-07 15:59:00
+Quartz has done normally - 2017-03-07 15:59:05
+Quartz has started to run - 2017-03-07 16:00:00
+Quartz has done normally - 2017-03-07 16:00:05
+Quartz has started to run - 2017-03-07 16:01:00
+Quartz has done normally - 2017-03-07 16:01:05
+Quartz has started to run - 2017-03-07 16:02:00
+Quartz has done normally - 2017-03-07 16:02:05
+Quartz has started to run - 2017-03-07 16:03:00
+Quartz has done normally - 2017-03-07 16:03:05
+Quartz has started to run - 2017-03-07 16:04:00
+Quartz has done normally - 2017-03-07 16:04:05
+Quartz has started to run - 2017-03-07 16:05:00
+Quartz has done normally - 2017-03-07 16:05:06
+Quartz has started to run - 2017-03-07 16:06:00
+Quartz has done normally - 2017-03-07 16:06:05
+Quartz has started to run - 2017-03-07 16:07:00
+Quartz has done normally - 2017-03-07 16:07:05
+Quartz has started to run - 2017-03-07 16:08:00
+Quartz has done normally - 2017-03-07 16:08:05
+Quartz has started to run - 2017-03-07 16:09:00
+Quartz has done normally - 2017-03-07 16:09:05
+Quartz has started to run - 2017-03-07 16:10:00
+Quartz has done normally - 2017-03-07 16:10:04
+Quartz has started to run - 2017-03-07 16:11:00
+Quartz has done normally - 2017-03-07 16:11:04
+Quartz has started to run - 2017-03-07 16:12:00
+Quartz has done normally - 2017-03-07 16:12:04
+Quartz has started to run - 2017-03-07 16:13:00
+Quartz has done normally - 2017-03-07 16:13:04
+Quartz has started to run - 2017-03-07 16:14:00
+Quartz has done normally - 2017-03-07 16:14:04
+Quartz has started to run - 2017-03-07 16:15:00
+Quartz has done normally - 2017-03-07 16:15:04
+Quartz has started to run - 2017-03-07 16:16:00
+Quartz has done normally - 2017-03-07 16:16:04
+Quartz has started to run - 2017-03-07 16:17:00
+Quartz has done normally - 2017-03-07 16:17:04
+Quartz has started to run - 2017-03-07 16:18:00
+Quartz has done normally - 2017-03-07 16:18:05
+Quartz has started to run - 2017-03-07 16:19:00
+Quartz has done normally - 2017-03-07 16:19:05
+Quartz has started to run - 2017-03-07 16:20:00
+Quartz has done normally - 2017-03-07 16:20:05
+Quartz has started to run - 2017-03-07 16:21:00
+Quartz has done normally - 2017-03-07 16:21:05
+Quartz has started to run - 2017-03-07 16:22:00
+Quartz has done normally - 2017-03-07 16:22:05
+Quartz has started to run - 2017-03-07 16:23:00
+Quartz has done normally - 2017-03-07 16:23:05
+Quartz has started to run - 2017-03-07 16:24:00
+Quartz has done normally - 2017-03-07 16:24:05
+Quartz has started to run - 2017-03-07 16:25:00
+Quartz has done normally - 2017-03-07 16:25:05
+Quartz has started to run - 2017-03-07 16:26:00
+Quartz has done normally - 2017-03-07 16:26:05
+Quartz has started to run - 2017-03-07 16:27:00
+Quartz has done normally - 2017-03-07 16:27:05
+Quartz has started to run - 2017-03-07 16:28:00
+Quartz has done normally - 2017-03-07 16:28:04
+Quartz has started to run - 2017-03-07 16:29:00
+Quartz has done normally - 2017-03-07 16:29:05
+Quartz has started to run - 2017-03-07 16:30:00
+Quartz has done normally - 2017-03-07 16:30:04
+Quartz has started to run - 2017-03-07 16:31:00
+Quartz has done normally - 2017-03-07 16:31:04
+Quartz has started to run - 2017-03-07 16:32:00
+Quartz has done normally - 2017-03-07 16:32:04
+Quartz has started to run - 2017-03-07 16:33:00
+Quartz has done normally - 2017-03-07 16:33:04
+Quartz has started to run - 2017-03-07 16:34:00
+Quartz has done normally - 2017-03-07 16:34:05
+Quartz has started to run - 2017-03-07 16:35:00
+Quartz has done normally - 2017-03-07 16:35:05
+Quartz has started to run - 2017-03-07 16:36:00
+Quartz has done normally - 2017-03-07 16:36:05
+Quartz has started to run - 2017-03-07 16:37:00
+Quartz has done normally - 2017-03-07 16:37:04
+Quartz has started to run - 2017-03-07 16:38:00
+Quartz has done normally - 2017-03-07 16:38:05
+Quartz has started to run - 2017-03-07 16:39:00
+Quartz has done normally - 2017-03-07 16:39:10
+Quartz has started to run - 2017-03-07 16:40:00
+Quartz has done normally - 2017-03-07 16:40:09
+Quartz has started to run - 2017-03-07 16:41:00
+Quartz has done normally - 2017-03-07 16:41:09
+Quartz has started to run - 2017-03-07 16:42:00
+Quartz has done normally - 2017-03-07 16:42:09
+Quartz has started to run - 2017-03-07 16:43:00
+Quartz has done normally - 2017-03-07 16:43:08
+Quartz has started to run - 2017-03-07 16:44:00
+Quartz has done normally - 2017-03-07 16:44:09
+Quartz has started to run - 2017-03-07 16:45:00
+Quartz has done normally - 2017-03-07 16:45:09
+Quartz has started to run - 2017-03-07 16:46:00
+Quartz has done normally - 2017-03-07 16:46:05
+Quartz has started to run - 2017-03-07 16:47:00
+Quartz has done normally - 2017-03-07 16:47:06
+Quartz has started to run - 2017-03-07 16:48:00
+Quartz has done normally - 2017-03-07 16:48:06
+Quartz has started to run - 2017-03-07 16:49:00
+Quartz has done normally - 2017-03-07 16:49:09
+Quartz has started to run - 2017-03-07 16:50:00
+Quartz has done normally - 2017-03-07 16:50:08
+Quartz has started to run - 2017-03-07 16:51:00
+Quartz has done normally - 2017-03-07 16:51:09
+Quartz has started to run - 2017-03-07 16:52:00
+Quartz has done normally - 2017-03-07 16:52:08
+Quartz has started to run - 2017-03-07 16:53:00
+Quartz has done normally - 2017-03-07 16:53:08
+Quartz has started to run - 2017-03-07 16:54:00
+Quartz has done normally - 2017-03-07 16:54:06
+Quartz has started to run - 2017-03-07 16:55:00
+Quartz has done normally - 2017-03-07 16:55:06
+Quartz has started to run - 2017-03-07 16:56:00
+Quartz has done normally - 2017-03-07 16:56:07
+Quartz has started to run - 2017-03-07 16:57:00
+Quartz has done normally - 2017-03-07 16:57:08
+Quartz has started to run - 2017-03-07 16:58:00
+Quartz has done normally - 2017-03-07 16:58:05
+Quartz has started to run - 2017-03-07 16:59:00
+Quartz has done normally - 2017-03-07 16:59:05
+Quartz has started to run - 2017-03-07 17:00:00
+Quartz has done normally - 2017-03-07 17:00:05
+Quartz has started to run - 2017-03-07 17:01:00
+Quartz has done normally - 2017-03-07 17:01:05
+Quartz has started to run - 2017-03-07 17:12:00
+An error Occured - 2017-03-07 17:12:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 17:16:00
+An error Occured - 2017-03-07 17:16:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 17:47:00
+An error Occured - 2017-03-07 17:47:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 17:49:00
+An error Occured - 2017-03-07 17:49:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 17:50:00
+An error Occured - 2017-03-07 17:50:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 17:51:00
+An error Occured - 2017-03-07 17:51:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 17:52:00
+An error Occured - 2017-03-07 17:52:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 17:53:00
+An error Occured - 2017-03-07 17:53:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 17:54:00
+An error Occured - 2017-03-07 17:54:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 17:55:00
+An error Occured - 2017-03-07 17:55:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 17:59:00
+An error Occured - 2017-03-07 17:59:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 18:00:00
+An error Occured - 2017-03-07 18:00:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 18:01:00
+An error Occured - 2017-03-07 18:01:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 18:02:00
+An error Occured - 2017-03-07 18:02:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 18:03:01
+An error Occured - 2017-03-07 18:03:01 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 18:04:00
+An error Occured - 2017-03-07 18:04:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 18:08:00
+An error Occured - 2017-03-07 18:08:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 18:09:00
+An error Occured - 2017-03-07 18:09:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 18:10:00
+An error Occured - 2017-03-07 18:10:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 18:11:00
+An error Occured - 2017-03-07 18:11:00 
+ StackTrace >> 
+java.lang.IllegalArgumentException: Mapped Statements collection does not contain value for com.appg.djTalk.mybatis.external.mapper.ExCommMapper.getDepts
+Quartz has started to run - 2017-03-07 18:12:00
+Quartz has started to run - 2017-03-07 18:13:00
+An error Occured - 2017-03-07 18:15:37 
+ StackTrace >> 
+org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 2
+Quartz has started to run - 2017-03-07 18:25:00
+Quartz has done normally - 2017-03-07 18:47:55
+Quartz has started to run - 2017-03-07 23:00:00
+An error Occured - 2017-03-07 23:24:33 
+ StackTrace >> 
+java.lang.NullPointerException

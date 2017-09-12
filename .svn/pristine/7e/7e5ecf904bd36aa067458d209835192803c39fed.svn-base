@@ -1,0 +1,672 @@
+package com.appg.djTalk.service;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.appg.djTalk.common.batch.manager.BatchJobProcessManager;
+import com.appg.djTalk.common.bean.DataMap;
+import com.appg.djTalk.common.exception.DefSeCode;
+import com.appg.djTalk.common.exception.ServiceException;
+import com.appg.djTalk.common.push.DataBean;
+import com.appg.djTalk.common.push.PushCls;
+import com.appg.djTalk.common.push.PushConstants;
+import com.appg.djTalk.common.upload.FileBean;
+import com.appg.djTalk.common.util.Base64Coder;
+import com.appg.djTalk.common.util.DateUtil;
+import com.appg.djTalk.common.util.JsonUtil;
+import com.appg.djTalk.common.util.chat.ChatUtil;
+import com.appg.djTalk.common.util.chat.contants.ChatConstants;
+import com.appg.djTalk.mybatis.board.mapper.BoardMapper;
+import com.appg.djTalk.mybatis.core.mapper.CommMapper;
+import com.appg.djTalk.mybatis.external.mapper.ExCommMapper;
+
+@Service
+public class SvcApiCommon {
+	@Autowired BatchJobProcessManager batchJobProcessManager;
+	@Autowired CommMapper commMapper;
+	@Autowired ExCommMapper exCommMapper;
+	@Autowired BoardMapper boardMapper;
+	
+	public List<DataMap> getCounsellingList(String memberId){
+		List<DataMap> preProcess = exCommMapper.getCounsellingList(memberId); 
+		List<DataMap> retVal = new ArrayList<DataMap>();
+		
+		List<String> ongoing = commMapper.isAlreadyOngoing(memberId);
+		
+		for(DataMap map : preProcess){
+			if(!ongoing.contains(map.getString("memberId"))) retVal.add(map);
+		}
+		
+		return retVal;
+	}
+	
+	public List<DataMap> getListOfBoard(int seq) throws ServiceException{
+		
+		
+		List<DataMap> list = boardMapper.getListOfBoard(seq);
+		return list;
+	}
+	
+	public void wakelock(DataMap procData) throws Exception{
+		
+		// TODO Json 형태 협의
+		
+		PushCls pushCls = new PushCls(batchJobProcessManager);
+		
+		List<DataMap> list = new ArrayList<DataMap>();
+		
+		
+		
+		JSONArray arr = JsonUtil.Arr.create(procData.getString("list"));
+		
+		if(arr == null){
+			
+			JSONObject json = JsonUtil.Obj.create("{}");
+			json.put("recvuid", procData.getString("recvuid"));
+			json.put("data", procData.getString("data"));
+			json.put("cmd", procData.getString("cmd"));
+			json.put("rid", procData.getString("rid"));
+			json.put("senduid", procData.getString("senduid"));
+			json.put("mtime", procData.getString("mtime"));
+			
+			arr = new JSONArray();
+			arr.put(json);
+			
+		}
+		
+		System.out.println(arr.toString());
+		
+		for(int i = 0; i < arr.length(); i++) {
+			DataMap map = new DataMap();
+			map.put("no", JsonUtil.Arr.getJSONObject(arr, i).getString("recvuid"));
+			list.add(map);
+		}
+		
+		List<DataMap> pushTargetList = commMapper.getRegKeyWake(list);
+		
+		
+		for(int i = 0; i < pushTargetList.size(); i++){
+			DataMap unit = pushTargetList.get(i);
+			int catcher = -1;
+			for(int ii = 0; ii < arr.length(); ii++) {
+				if(JsonUtil.Arr.getJSONObject(arr, ii).getString("recvuid").equals(unit.getString("no"))) {
+					catcher = ii;
+					break;
+				}
+			}
+			JSONObject json = JsonUtil.Arr.getJSONObject(arr, catcher);
+			DataBean data = new DataBean(unit.getInt("vibration"), unit.getInt("notifyWithSound"), unit.getString("notificationSound"), json.getString("rid"), json.getString("senduid"),
+					json.getString("recvuid"), json.getString("data"), json.getString("mtime"), json.getString("data"), PushConstants.PUSH_TYPE_MSG);
+			if(unit.getInt("deviceType") == 2){
+				data.getCustomData().put("msg", JsonUtil.Obj.getString(JsonUtil.Obj.create(data.getMessage()), "msg"));
+				data.getCustomData().put("message", data.getMessage());
+				data.getCustomData().put("vibration", Integer.toString(data.getVibration()));
+				data.getCustomData().put("notifyWithSound", Integer.toString(data.getNotifyWithSound()));
+				data.getCustomData().put("notificationSound", data.getNotificationSound());
+				data.getCustomData().put("rid", data.getRid());
+				data.getCustomData().put("senduid", data.getSenduid());
+				data.getCustomData().put("recvuid", data.getRecvuid());
+				data.getCustomData().put("data", data.getData());
+				data.getCustomData().put("mtime", data.getMtime());
+				//pushCls.sendPush(PushConstants.PUSH_DEVICE_TYPE_IOS, unit.getString("regKey"), data);
+			}else{
+				pushCls.sendPush(PushConstants.PUSH_DEVICE_TYPE_AND, unit.getString("regKey"), data);
+			}
+		}
+	}
+	
+	public String testIOS(){
+		PushCls pushCls = new PushCls(batchJobProcessManager);
+		String retVal = null;
+		DataBean data = new DataBean(0, 1, "default", "RID", "suid", "ruid", "data", "mtime", "data", PushConstants.PUSH_TYPE_MSG);
+		data.getCustomData().put("message", data.getMessage());
+		data.getCustomData().put("vibration", Integer.toString(data.getVibration()));
+		data.getCustomData().put("notifyWithSound", Integer.toString(data.getNotifyWithSound()));
+		data.getCustomData().put("notificationSound", data.getNotificationSound());
+		data.getCustomData().put("rid", data.getRid());
+		data.getCustomData().put("senduid", data.getSenduid());
+		data.getCustomData().put("recvuid", data.getRecvuid());
+		data.getCustomData().put("data", data.getData());
+		data.getCustomData().put("mtime", data.getMtime());
+		pushCls.sendPush(PushConstants.PUSH_DEVICE_TYPE_IOS, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", data);
+		System.out.println("testIOS called");
+		return retVal;
+	}
+	
+	public void sendPushAll(DataMap procData){
+		
+		PushCls pushCls = new PushCls(batchJobProcessManager);
+		
+		List<DataMap> pushTargetList = commMapper.getRegKeyAll();
+		
+		
+		for(int i = 0; i < pushTargetList.size(); i++){
+			DataMap unit = pushTargetList.get(i);
+			DataBean data = new DataBean(unit.getInt("vibration"), unit.getInt("notifyWithSound"), unit.getString("notificationSound"), "rid", "senduid",
+					"recvuid", "data", "mtime", "message", PushConstants.PUSH_TYPE_MSG);
+			if(unit.getInt("deviceType") == 2){
+				//pushCls.sendPush(PushConstants.PUSH_DEVICE_TYPE_IOS, unit.getString("regKey"), data);
+			}else{
+				pushCls.sendPush(PushConstants.PUSH_DEVICE_TYPE_AND, unit.getString("regKey"), data);
+			}
+		}
+	}
+
+	public void sendPush(DataMap procData){
+		PushCls pushCls = new PushCls(batchJobProcessManager);
+		
+		List<DataMap> pushTargetList = commMapper.getRegKeyList(new ArrayList<DataMap>());
+		
+		
+		for(int i = 0; i < pushTargetList.size(); i++){
+			DataMap unit = pushTargetList.get(i);
+			DataBean data = new DataBean(unit.getInt("vibration"), unit.getInt("notifyWithSound"), unit.getString("notificationSound"), "rid", "senduid",
+					"recvuid", "data", "mtime", "message", PushConstants.PUSH_TYPE_MSG);
+			if(unit.getInt("deviceType") == 2){
+				//pushCls.sendPush(PushConstants.PUSH_DEVICE_TYPE_IOS, unit.getString("regKey"), data);
+			}else{
+				pushCls.sendPush(PushConstants.PUSH_DEVICE_TYPE_AND, unit.getString("regKey"), data);
+			}
+		}
+	}
+	
+	public DataMap makeCounsellingRoom(String memberId, String opposite) throws Exception{
+		
+		if(commMapper.isRedundantCounselling(memberId) != 0) throw new ServiceException(100);
+		
+		DataMap m = null;
+		
+		String rid = ChatUtil.creatTeamRoom(memberId, new String[]{memberId, opposite}, "CO");
+		
+		if(rid == null) {
+			System.out.println("-----> Creating Job Failed.");
+			throw new Exception();	
+		}
+		else {
+			System.out.println("-----> Creating Job Succeeded.");
+			
+			DataMap params = new DataMap();
+			params.put("desc", "1:1 상담방");
+			params.put("roomId", rid);
+			params.put("type", "CO");
+			params.put("pref_dept", "");
+			params.put("pref_section", "");
+			params.put("pref_class", "");
+			params.put("pref_daynight", "");
+			params.put("pref_grade", 0);
+			
+			commMapper.createRoom(params);
+			
+			int roomNo = commMapper.getRoomNumber(rid);
+			
+			m = commMapper.getRoomDetail(roomNo);
+			
+			commMapper.setMember(roomNo, memberId);
+			commMapper.setMember(roomNo, opposite);
+			
+			JSONObject roomInfoJson = ChatUtil.getChatRoomInfo(m.get("roomId").toString());
+			DataMap roomInfo = new DataMap();
+			List<String> memuids = new ArrayList<String>();	
+			
+			JSONArray arr = ChatUtil.getChatLastMsgList(new String[]{m.getString("roomId")});
+			
+			String msg = null;
+			String cTime = null;
+			try{
+				msg = arr.getJSONObject(0).getJSONObject("data").getString("msg");
+				cTime = DateUtil.convertMillisToDatetime(arr.getJSONObject(0).getString("mtime"));
+			}catch(JSONException e){
+				msg = "";
+				cTime = "";
+			}
+			
+			for(int i = 0; i < roomInfoJson.getJSONArray("memuids").length(); i++) memuids.add(roomInfoJson.getJSONArray("memuids").getString(i));
+		
+			roomInfo.put("rcode", roomInfoJson.getInt("rcode"));
+			roomInfo.put("uid", roomInfoJson.getString("uid"));
+			roomInfo.put("rtype", roomInfoJson.getString("rtype"));
+			roomInfo.put("memuids", memuids);
+			roomInfo.put("lastMessage", msg);
+			roomInfo.put("lastTime", cTime);
+		
+			m.put("roomInfo", roomInfo);
+			
+			Set<String> hashFilter = new HashSet<String>();
+			
+			List<DataMap> detailList = commMapper.getUserListOfRoom(m.getInt("no"));
+			
+			for(DataMap map : detailList) hashFilter.add(map.getString("no"));
+			
+			for(int i = 0; i < roomInfoJson.getJSONArray("memuids").length(); i++)
+				if(!hashFilter.contains(roomInfoJson.getJSONArray("memuids").getString(i))){
+					DataMap nones = new DataMap();
+					nones.put("no", roomInfoJson.getJSONArray("memuids").getString(i));
+					nones.put("nickname", getMemberDetail(roomInfoJson.getJSONArray("memuids").getString(i)).getString("name"));
+					detailList.add(nones);
+				}
+			
+			for(DataMap map : detailList){
+				DataMap mDetail = getMemberDetail(map.getString("no"));
+				map.put("belongsTo", getUserDescWithDataMap(mDetail));
+				map.put("img", commMapper.getMultiMedia(map.getInt("profile_f")));
+				map.put("detail", mDetail);
+			}
+			m.put("users", detailList);
+		}
+		
+		return m;
+	}
+	
+	public boolean hasAlreadyRegistered(String memberId){
+		if(commMapper.hasAlreadyRegistered(memberId) != 0) return true;
+		return false;
+	}
+	
+	public DataMap getPhoneNumber(String memberId){
+		return exCommMapper.getPhoneNumber(memberId);
+	}
+	
+	public DataMap getMemberDetail(String memberId){
+		return exCommMapper.getMemberDetail(memberId);
+	}
+	
+	public List<Integer> uploadFileLog(String memberId, String room, List<FileBean> files){
+		//int result = 0;
+		
+		List<Integer> keys = new ArrayList<Integer>();
+		
+		for(FileBean f : files){
+			DataMap map = new DataMap();
+			map.put("mediaPath",f.getFileUrlPath());
+			map.put("originalName",f.getFileName());
+			map.put("extension",f.getExtension());
+			map.put("size", (int)f.getFileSize());
+			map.put("type",f.getFileType());
+			map.put("memberId", memberId);
+			map.put("room", room);
+			
+			commMapper.logFile(map);
+			
+			keys.add(map.getInt("no"));
+			//saveList.add(map);
+		}
+		
+		//result = commMapper.logFileBulk(saveList);
+		
+		return keys;
+	}
+	
+	public void setProfile(String memberId, int profile, String nickName) throws Exception{
+		String nickTemp = nickName;
+		if(nickName.equals("")) nickTemp = exCommMapper.getUserName(memberId);
+		if(profile == -1) commMapper.setProfileNoProfile(memberId, nickTemp);
+		else commMapper.setProfile(memberId, profile, nickTemp);
+	}
+	
+	public String getMemberIdDev(String userAccount){
+		return exCommMapper.getMemberIdDev(userAccount);
+	}
+	
+	public String getMemberId(String userAccount, String userPassword){
+		return exCommMapper.getMemberId(userAccount, userPassword);
+	}
+	
+	public String getUserName(String memberId){
+		return exCommMapper.getUserName(memberId);
+	}
+	
+	public int logoutPreviousDevice(String memberId){ // MD : 로그아웃
+		// TODO 소켓이나 푸시를 통한 로그아웃 처리
+		return 0;
+	}
+	
+	public DataMap setDisturb(String memberId, String start, String end){
+		commMapper.setDisturb(memberId, start, end);
+		return commMapper.getDisturbState(memberId);
+	}
+	
+	/**
+	 * 사용자 배열을 쿼리 문자로 변환하여 이들의 리스트를 반환한다
+	 * @param userKeys
+	 * @return
+	 * @throws ServiceException
+	 */
+	public List<DataMap> getUserList(String userKeys) throws ServiceException{
+		List<DataMap> retVal = null;
+		try{
+			if("".equals(userKeys))
+				throw new ServiceException(DefSeCode.INVALID_PARAMS_CODE, DefSeCode.INVALID_PARAMS_MSG);
+			
+			JSONArray arr = JsonUtil.Arr.create(userKeys);
+			List<String> list = new ArrayList<String>();
+			
+			System.out.println(arr.toString());
+			
+			for(int i = 0; i < arr.length(); i++) {
+				list.add(JsonUtil.Arr.getString(arr, i));
+			}
+			
+			System.out.println(list.toString());
+			retVal = commMapper.getUserList(list);
+			
+			Set<String> hashFilter = new HashSet<String>();
+			
+			for(DataMap map : retVal) hashFilter.add(map.getString("no"));
+			
+			for(int i = 0; i < arr.length(); i++)
+				if(!hashFilter.contains(JsonUtil.Arr.getString(arr, i))){
+					DataMap nones = new DataMap();
+					nones.put("no", JsonUtil.Arr.getString(arr, i));
+					nones.put("nickname", getMemberDetail(JsonUtil.Arr.getString(arr, i)).getString("name"));
+					retVal.add(nones);
+				}
+			
+			for(DataMap map : retVal){
+				DataMap mDetail = getMemberDetail(map.getString("no"));
+				map.put("detail", mDetail);
+				DataMap img = new DataMap();
+				if(map.getInt("profile_f") != 0) img = commMapper.getMultiMedia(map.getInt("profile_f")); 
+				map.put("img", img);
+				map.put("belongsTo", getUserDescWithDataMap(mDetail));
+			}
+			
+		} catch(ServiceException e){
+			throw e;
+		} catch(Exception e){
+			e.printStackTrace();
+			throw new ServiceException(DefSeCode.BASIC_ERROR_CODE, DefSeCode.BASIC_ERROR_MSG);
+		}
+		
+		// TODO Merge
+		
+		return retVal;
+	}
+	
+	public DataMap offDisturb(String memberId){
+		commMapper.offDisturb(memberId);
+		return commMapper.getDisturbState(memberId);
+	}
+	
+	public DataMap getUser(String i){
+		DataMap user = commMapper.getUser(i);
+		if(user == null){
+			user = new DataMap();
+			user.put("nickname", getMemberDetail(i).getString("name"));
+		}else{
+			int mf = user.getInt("profile_f");
+			user.put("img", commMapper.getMultiMedia(mf));			
+		}
+		DataMap mDetail = getMemberDetail(i);
+		user.put("detail", mDetail);
+		user.put("belongsTo", getUserDescWithDataMap(mDetail));
+		
+		return user;
+	}
+	
+	public void updateUser(String memberId, String deviceId, int deviceType, int allowPush, String regKey, String appVersion, String lastIp){
+		DataMap params = new DataMap();
+		
+		String prevRegKey = commMapper.getCurrentRegKey(memberId);
+		
+		params.put("no", memberId);
+		params.put("deviceId", deviceId);
+		params.put("deviceType", deviceType);
+		params.put("allowPush", allowPush);
+		params.put("regKey", regKey);
+		params.put("prevRegKey", prevRegKey);
+		params.put("appVersion", appVersion);
+		params.put("lastIp", lastIp);
+		
+		logoutPreviousDevice(memberId);
+		
+		commMapper.updateUser(params);
+	}
+	
+	public void updateUser(String memberId, String deviceId, String regKey, String appVersion, String lastIp){
+		DataMap params = new DataMap();
+		
+		String prevRegKey = commMapper.getCurrentRegKey(memberId);
+		
+		params.put("no", memberId);
+		params.put("deviceId", deviceId);
+		params.put("regKey", regKey);
+		params.put("prevRegKey", prevRegKey);
+		params.put("appVersion", appVersion);
+		params.put("lastIp", lastIp);
+		
+		logoutPreviousDevice(memberId);
+		
+		commMapper.updateUserIntro(params);
+	}
+	
+	public void setVibration(String memberId, int mode){
+		commMapper.setVibration(memberId, mode);
+	}
+	
+	public void setNotiSound(String memberId, String mode){
+		commMapper.setNotiSound(memberId, mode);
+	}
+	
+	public int toggleAndGetPush(String memberId){
+		commMapper.pushToggle(memberId);
+		return commMapper.getPushState(memberId);
+	}
+	
+	public int toggleAndGetSound(String memberId){
+		commMapper.soundToggle(memberId);
+		return commMapper.getNSoundState(memberId);
+	}
+	
+	public String getUserDescription(String type, String deptName, int grade, String daynight, String section){
+		String desc = "";
+		String dn = "";
+		if(daynight != null){
+			if(daynight.equals("주")) dn = "주간";
+			else if(daynight.equals("야")) dn = "야간";
+			else dn = "";
+		}
+		
+		switch(type){
+		case "학": desc = deptName + " " + grade + "학년 " + dn + " " + section + "반" ; break;
+		case "조": desc = deptName; break;
+		case "교": desc = deptName; break;
+		case "직": desc = deptName; break;
+		default: break;
+		}
+		
+		return desc;
+	}
+	
+	public String getUserDescWithDataMap(DataMap m){
+		if(m == null) return null;
+		String type = m.getString("access");
+		String dept = m.getString("deptName");
+		int grade = m.getInt("grade");
+		String daynight = m.getString("daynight");
+		String section = m.getString("class");
+		return getUserDescription(type, dept, grade, daynight, section);
+	}
+	
+	public void invalidateChat(String rid, String by, String isSave) throws Exception{
+		
+		if(rid == null) throw new Exception();
+		if(rid.length() == 0) throw new Exception();
+		
+		JSONObject msg = ChatUtil.getChatMsgList(rid, "");
+		try {
+			if (isSave.toUpperCase().equals("Y")) {
+				JSONArray arr = msg.getJSONArray("list");
+				for (int i = 0; i < arr.length(); i++) {
+					JSONObject obj = arr.getJSONObject(i);
+
+					DataMap params = new DataMap();
+					// params.put("prof_uid", Integer.toString(memberId));
+					// params.put("stu_uid", Integer.toString(opposite));
+					params.put("roomId", rid);
+					String data = Base64Coder.encodeString(obj.getJSONObject("data").toString());
+					String dec_data = Base64Coder.decodeString(data);
+					params.put("data", data);
+					params.put("mtime", obj.getString("mtime"));
+
+					commMapper.insertChatHistory(params);
+
+				}
+			}
+			
+			if(ChatUtil.sendMessage(by, rid, "M", ChatUtil.makeMsgJsonData("", ChatConstants.MSG_TYPE_CUSTOM_SYSTEM_ROOM_DESTORY))) commMapper.invalidateRoom(rid);
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw new Exception();
+		}
+		
+	}
+	
+	public DataMap getRoomList(String memberId) throws Exception{
+		DataMap result = new DataMap();
+		
+		DataMap lastOfType1 = commMapper.getTodayLast(memberId, 1);
+		DataMap lastOfType2 = commMapper.getTodayLast(memberId, 2);
+		
+		String type1Last = lastOfType1.getString("regDate");
+		String type2Last = lastOfType2.getString("regDate");
+		
+		lastOfType1.put("regDate", DateUtil.convertToRelativeTypeWithTime(type1Last));
+		lastOfType2.put("regDate", DateUtil.convertToRelativeTypeWithTime(type2Last));
+		
+		result.put("lastOfType1", lastOfType1);
+		result.put("lastOfType2", lastOfType2);
+		
+		try{
+			List<DataMap> roomList = commMapper.getAvailableRooms(memberId);
+			List<String> rids = new ArrayList<String>();
+			
+			for(int i = 0; i < roomList.size(); i++) rids.add(roomList.get(i).getString("roomId"));
+			
+			// JSONArray arr = ChatUtil.getChatLastMsgList(rids.toArray(new String[0]));
+			
+			for(int e = 0; e < roomList.size(); e++){
+				DataMap m = roomList.get(e);
+				JSONObject roomInfoJson = ChatUtil.getChatRoomInfo(m.get("roomId").toString());
+				DataMap roomInfo = new DataMap();
+				List<String> memuids = new ArrayList<String>();	
+							
+				String msg = null;
+				String cTime = null;
+				String mTime = null;
+//				try{
+//					msg = arr.getJSONObject(e).getJSONObject("data").getString("msg");
+//					mTime = arr.getJSONObject(e).getString("mtime");
+//					cTime = DateUtil.convertToRelativeType(arr.getJSONObject(0).getString("mtime"));
+//				}catch(JSONException ee){
+//					msg = "";
+//					cTime = "";
+//				}
+				
+				for(int i = 0; i < roomInfoJson.getJSONArray("memuids").length(); i++) memuids.add(roomInfoJson.getJSONArray("memuids").getString(i));
+			
+				roomInfo.put("rcode", roomInfoJson.getInt("rcode"));
+				roomInfo.put("uid", roomInfoJson.getString("uid"));
+				roomInfo.put("rtype", roomInfoJson.getString("rtype"));
+				roomInfo.put("memuids", memuids);
+				roomInfo.put("lastMessage", msg);
+				
+				roomInfo.put("lastTime", cTime);
+				roomInfo.put("lastMillis", mTime);
+			
+				m.put("roomInfo", roomInfo);
+				
+				Set<String> hashFilter = new HashSet<String>();
+				
+				List<DataMap> detailList = commMapper.getUserListOfRoom(m.getInt("no"));
+				
+				for(DataMap map : detailList) hashFilter.add(map.getString("no"));
+				
+				List<DataMap> selectList = new ArrayList<DataMap>();
+				
+				for(int i = 0; i < roomInfoJson.getJSONArray("memuids").length(); i++) {
+					String memuid = roomInfoJson.getJSONArray("memuids").getString(i);
+					
+					if(!hashFilter.contains(memuid)){
+						DataMap data = new DataMap();
+						if(memuid.equals(SvcQuartz.SERVER_AUTO_UID)) continue;
+						DataMap nones = new DataMap();
+						nones.put("no", memuid);
+						detailList.add(nones);
+					}
+				}
+				
+				List<DataMap> userList = exCommMapper.getMemberDetailBulk(detailList);
+				
+				for(int i = 0; i < userList.size(); i++) {
+					DataMap map = userList.get(i);
+					DataMap img = new DataMap();
+					if(detailList.get(i).getInt("profile_f") != 0) img = commMapper.getMultiMedia(detailList.get(i).getInt("profile_f"));
+					userList.get(i).put("belongsTo", getUserDescWithDataMap(map));
+					
+					int catcher = -1;
+					
+					for(int ii = 0; ii < userList.size(); ii++)
+						if(userList.get(ii).getString("memberId").equals(detailList.get(i).getString("no"))) {
+							catcher = ii;
+							break;
+						}
+					
+					if(detailList.get(i).get("nickname") == null) {
+						detailList.get(i).put("nickname", userList.get(catcher).getString("name"));
+					}
+					detailList.get(i).put("img", img);
+					detailList.get(i).put("detail", userList.get(catcher));
+				}
+				
+				/*
+				for(DataMap map : detailList){
+					DataMap mDetail = getMemberDetail(map.getString("no"));
+					DataMap img = null;
+					if(map.getInt("profile_f") != 0) img = commMapper.getMultiMedia(map.getInt("profile_f")); 
+					map.put("belongsTo", getUserDescWithDataMap(mDetail));
+					map.put("img", img);
+					map.put("detail", mDetail);
+				}
+				*/
+				
+				m.put("users", detailList);
+			}		
+			result.put("roomList", roomList);
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new ServiceException(DefSeCode.GENERAL_FAIL, "Unable to parse JSON Object");
+		}
+		
+		return result;
+	}
+	
+	public String registerNewly(String deviceId, int deviceType, int allowPush, String memberId){ // MD-SQL : 등록된 키를 반환해야 함.
+		DataMap params = new DataMap();
+		params.put("deviceId", deviceId);
+		params.put("allowPush", allowPush);
+		params.put("deviceType", deviceType);
+		params.put("no", memberId);
+		params.put("name", exCommMapper.getUserName(memberId));
+		commMapper.registerNewly(params);
+		
+		return memberId;
+	}
+	
+	public List<DataMap> getTodayList(String memberId, int type, int lastRead, int limit){
+		List<DataMap> list = null;
+		if(lastRead == -1) list = commMapper.getTodayListInfinite(memberId, type, 0);
+		else list = commMapper.getTodayList(memberId, type, lastRead, limit);
+		
+		// TODO
+		return list;
+	}
+	
+}

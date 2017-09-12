@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.appg.djTalk.mybatis.board.mapper.BoardMapper">
+
+	<select id="getListOfBoard" resultMap="getClobContents">
+		SELECT SEQ, CONTENTS, TARGETCODE FROM NOTIFY_01 
+		WHERE BBSID='guidance' AND (TARGETCODE='001' OR TARGETCODE='002') AND SEQ > #{seq} ORDER BY SEQ
+	</select>
+
+	<select id = "testQuery" resultType = "int">
+		SELECT 1 FROM DUAL
+	</select>
+	<!-- Previous -->
+	
+	<resultMap type="DataMap" id="getClobContents">
+		<result property="CONTENTS"  column="CONTENTS"  jdbcType="CLOB" javaType="java.lang.String" />
+	</resultMap>
+
+
+</mapper>

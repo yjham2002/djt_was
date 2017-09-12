@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.appg.djTalk.mybatis.counsell.mapper.CounsellMapper">
+
+	<select id="testQuery" resultType="Integer">
+		SELECT 1
+	</select>
+
+	<insert id="insertHistory" parameterType="DataMap">
+		INSERT INTO TSD_JOB_PROF_COUNSEL
+           (
+		   [CSEL_SEQ]
+           ,[TAKE_FLAG]
+           ,[STUD_CD]
+           ,[CSEL_PESN]
+           ,[CSEL_KIND]
+           ,[CONST_CHK]
+           ,[RESULT_YMD]
+           ,[RESULT_SUBJ]
+           ,[RESULT_CONT]
+           ,[STATE_CD]
+           ,[CRT_USER]       
+           ,[MOD_USER]
+           )
+     VALUES
+           (
+		   (SELECT ISNULL(MAX(CSEL_SEQ) + 1, 0) FROM TSD_JOB_PROF_COUNSEL)
+           ,'PRF'
+           ,(SELECT PESN_CD FROM XFM_PERSON_INFO WHERE ORIN_CD=#{apply})
+           ,(SELECT PESN_CD FROM XFM_PERSON_INFO WHERE ORIN_CD=#{prof})  
+           ,#{kind}
+           ,'Y'
+           ,CONVERT(CHAR(8), GETDATE(), 112)
+           ,'HIT톡 상담'
+           ,#{content}
+           ,'200'
+           ,'HITTALK'           
+           ,#{prof}           
+           );
+	</insert>
+
+</mapper>

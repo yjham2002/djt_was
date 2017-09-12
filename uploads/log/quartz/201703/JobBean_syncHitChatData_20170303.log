@@ -1,0 +1,76 @@
+
+An error Occured - 2017-03-03 00:01:35 
+ StackTrace >> 
+org.springframework.dao.DataAccessResourceFailureException: 
+### Error querying database.  Cause: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 2,053,542 milliseconds ago.  The last packet sent successfully to the server was 2,053,542 milliseconds ago.
+### The error may exist in file [C:\Users\a\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp2\wtpwebapps\djTalk\WEB-INF\classes\com\appg\djTalk\mybatis\core\query\CommMapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT device_f, room_f FROM tblChatMember WHERE room_f = ?
+### Cause: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 2,053,542 milliseconds ago.  The last packet sent successfully to the server was 2,053,542 milliseconds ago.
+; SQL []; Communications link failure
+
+The last packet successfully received from the server was 2,053,542 milliseconds ago.  The last packet sent successfully to the server was 2,053,542 milliseconds ago.; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 2,053,542 milliseconds ago.  The last packet sent successfully to the server was 2,053,542 milliseconds ago.
+Quartz has started to run - 2017-03-03 00:25:00
+Quartz has done normally - 2017-03-03 00:38:29
+Quartz has started to run - 2017-03-03 02:39:44
+Quartz has done normally - 2017-03-03 02:54:30
+Quartz has started to run - 2017-03-03 03:25:00
+Quartz has started to run - 2017-03-03 05:06:28
+Quartz has done normally - 2017-03-03 05:07:00
+Quartz has done normally - 2017-03-03 05:21:35
+Quartz has started to run - 2017-03-03 05:25:00
+Quartz has done normally - 2017-03-03 05:40:33
+Quartz has started to run - 2017-03-03 06:46:18
+Quartz has done normally - 2017-03-03 07:00:01
+Quartz has started to run - 2017-03-03 07:25:00
+Quartz has done normally - 2017-03-03 07:37:48
+Quartz has started to run - 2017-03-03 08:43:34
+Quartz has done normally - 2017-03-03 08:57:00
+Quartz has started to run - 2017-03-03 09:25:00
+Quartz has started to run - 2017-03-03 10:25:00
+Quartz has done normally - 2017-03-03 10:40:19
+Quartz has started to run - 2017-03-03 11:25:00
+Quartz has done normally - 2017-03-03 11:42:41
+Quartz has started to run - 2017-03-03 12:25:00
+Quartz has done normally - 2017-03-03 12:41:08
+Quartz has started to run - 2017-03-03 13:13:00
+Quartz has started to run - 2017-03-03 13:16:00
+Quartz has started to run - 2017-03-03 13:18:02
+An error Occured - 2017-03-03 13:18:52 
+ StackTrace >> 
+org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.exceptions.PersistenceException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is java.sql.SQLException: Data source is closed
+### The error may exist in file [C:\Users\a\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp2\wtpwebapps\djTalk\WEB-INF\classes\com\appg\djTalk\mybatis\core\query\CommMapper.xml]
+### The error may involve com.appg.djTalk.mybatis.core.mapper.CommMapper.getChatMemberPair
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is java.sql.SQLException: Data source is closed
+Quartz has started to run - 2017-03-03 13:21:06
+Quartz has started to run - 2017-03-03 13:30:00
+Quartz has started to run - 2017-03-03 13:38:00
+Quartz has started to run - 2017-03-03 14:30:00
+Quartz has done normally - 2017-03-03 14:43:51
+Quartz has started to run - 2017-03-03 15:30:00
+Quartz has done normally - 2017-03-03 15:55:37
+Quartz has started to run - 2017-03-03 16:30:00
+Quartz has done normally - 2017-03-03 16:51:30
+Quartz has started to run - 2017-03-03 17:30:00
+Quartz has done normally - 2017-03-03 17:51:02
+Quartz has started to run - 2017-03-03 18:30:00
+Quartz has done normally - 2017-03-03 18:53:07
+Quartz has started to run - 2017-03-03 19:30:00
+Quartz has done normally - 2017-03-03 19:52:22
+Quartz has started to run - 2017-03-03 20:30:00
+Quartz has done normally - 2017-03-03 20:56:30
+Quartz has started to run - 2017-03-03 21:30:00
+Quartz has started to run - 2017-03-03 22:30:00
+Quartz has done normally - 2017-03-03 22:30:47
+Quartz has started to run - 2017-03-03 23:30:00
+Quartz has done normally - 2017-03-03 23:39:31
+Quartz has done normally - 2017-03-03 23:57:21

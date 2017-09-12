@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.appg.djTalk.mybatis.external.mapper.ExCommMapper">
+
+	<select id="getAttendanceToday" resultType="DataMap">
+		SELECT *, EMP_ID AS memberId FROM ATTEND_TALK WHERE LECT_DT = CONVERT(VARCHAR(10), GETDATE(), 120) ORDER BY LECT_CD
+	</select>
+	
+	<select id="getMemberDeptPair" resultType="DataMap">
+		SELECT memberId, dept FROM
+		  (
+		  SELECT STUD_ID AS memberId, DEPT_CD AS dept FROM TALK_SLV_MST WHERE STATE_CD = '10'
+		  UNION ALL
+		  SELECT EMP_ID AS memberId, DEPT_CD AS dept FROM AMV_MST_TALK WHERE STATE_CD = '10'
+		) AS temp
+	</select>
+	
+	<select id="getDeptById" resultType="String">
+		SELECT DEPT_CD FROM
+		(
+		SELECT STUD_ID AS memberId, DEPT_CD FROM TALK_SLV_MST
+		UNION ALL
+		SELECT EMP_ID AS memberId, DEPT_CD FROM AMV_MST_TALK
+		) AS temp
+		WHERE memberId=#{memberId}
+	</select>
+
+	<select id="getTiming" resultType="DataMap">
+		SELECT TOP 1 * FROM TALK_RESET_STD WHERE END_DT > GETDATE() AND GETDATE() > ST_DT
+	</select>
+
+	<select id="getTodayBirth" resultType="DataMap">
+		SELECT * 
+		FROM (select 
+		STUD_ID AS memberId,
+		STUD_ID AS userAccount,
+		SPASSWORD AS userPassword,
+		SCHL_YR AS grade,
+		DEPT_CD AS dept,
+		(SELECT DEPT_NM FROM COV_DEPT_TALK WHERE COV_DEPT_TALK.DEPT_CD = TALK_SLV_MST.DEPT_CD) AS deptName,
+		CLS_DIV AS class,
+		CASE
+		WHEN DAY_TM_CD='10' THEN '주'
+		WHEN DAY_TM_CD='20' THEN '야'
+		END daynight,
+		MOBILE AS phone,
+		NM_KOR AS name,
+		'학' AS access,
+		SUBSTRING(BIRTH_DT, 3, 5) AS BIRTH_DT
+		from TALK_SLV_MST WHERE STATE_CD = '10'
+		UNION ALL
+		select 
+		EMP_ID AS memberId, 
+		EMP_ID AS userAccount, 
+		SPASSWORD AS userPassword, 
+		'' AS grade, 
+		DEPT_CD AS dept, 
+		(SELECT DEPT_NM FROM COV_DEPT_TALK WHERE COV_DEPT_TALK.DEPT_CD = AMV_MST_TALK.DEPT_CD) AS deptName,
+		'' AS class, 
+		'' AS daynight, 
+		MOBILE AS phone, 
+		NM_KOR AS name,
+		CASE 
+		WHEN JOB_TP_CD IN ('11','12','13','16','19')  THEN '교'
+		WHEN JOB_TP_CD IN ('34','35')  THEN '조'
+		ELSE '직'
+		END access,
+		SUBSTRING(BIRTH_DT, 3, 5) AS BIRTH_DT
+		from AMV_MST_TALK WHERE STATE_CD = '10') AS temp WHERE BIRTH_DT = SUBSTRING(CONVERT(VARCHAR(8), GETDATE(), 112), 5, 4)  
+	</select>
+	
+	<select id="getAllMember" resultType="DataMap">
+		SELECT * 
+		FROM (select 
+		STUD_ID AS memberId,
+		STUD_ID AS userAccount,
+		SPASSWORD AS userPassword,
+		SCHL_YR AS grade,
+		DEPT_CD AS dept,
+		(SELECT DEPT_NM FROM COV_DEPT_TALK WHERE COV_DEPT_TALK.DEPT_CD = TALK_SLV_MST.DEPT_CD) AS deptName,
+		CLS_DIV AS class,
+		CASE
+		WHEN DAY_TM_CD='10' THEN '주'
+		WHEN DAY_TM_CD='20' THEN '야'
+		END daynight,
+		MOBILE AS phone,
+		NM_KOR AS name,
+		'학' AS access,
+		SUBSTRING(BIRTH_DT, 6, 5) AS BIRTH_DT
+		from TALK_SLV_MST WHERE STATE_CD = '10'
+		UNION ALL
+		select 
+		EMP_ID AS memberId, 
+		EMP_ID AS userAccount, 
+		SPASSWORD AS userPassword, 
+		'' AS grade, 
+		DEPT_CD AS dept, 
+		(SELECT DEPT_NM FROM COV_DEPT_TALK WHERE COV_DEPT_TALK.DEPT_CD = AMV_MST_TALK.DEPT_CD) AS deptName,
+		'' AS class, 
+		'' AS daynight, 
+		MOBILE AS phone, 
+		NM_KOR AS name,
+		CASE 
+		WHEN JOB_TP_CD IN ('11','12','13','16','19')  THEN '교'
+		WHEN JOB_TP_CD IN ('34','35')  THEN '조'
+		ELSE '직'
+		END access,
+		SUBSTRING(BIRTH_DT, 6, 5) AS BIRTH_DT
+		from AMV_MST_TALK WHERE STATE_CD = '10') AS temp
+	</select>
+
+	<select id="getCounsellingList_in" resultType="DataMap"> <!-- Established -->
+		SELECT 
+		*,
+		(SELECT 
+		CASE 
+		WHEN COUNT(tblDevice.no) >= 1 THEN 'Y' 
+		WHEN COUNT(tblDevice.no) = 0 THEN 'N'
+		END loggedIn
+		FROM tblDevice WHERE memberId=tblDevice.no LIMIT 1) AS loggedIn
+		FROM temp WHERE department = (SELECT department FROM temp WHERE memberId = #{memberId}) AND (NOT memberId = #{memberId}) AND (NOT access = '교')
+		ORDER BY `name` ASC
+	</select>
+
+	<select id="getCounsellingList" resultType="DataMap"> <!-- Established -->
+		SELECT * 
+		FROM (select 
+		STUD_ID AS memberId,
+		STUD_ID AS userAccount,
+		SPASSWORD AS userPassword,
+		SCHL_YR AS grade,
+		DEPT_CD AS department,
+		CLS_DIV AS class,
+		DAY_TM_CD AS daynight,
+		MOBILE AS phone,
+		NM_KOR AS name,
+		'학' AS access
+		from TALK_SLV_MST WHERE STATE_CD = '10'
+		) AS temp 
+		WHERE department = (
+		SELECT DEPT_CD 
+		FROM (SELECT DEPT_CD, STUD_ID AS memberId FROM TALK_SLV_MST UNION ALL SELECT DEPT_CD, EMP_ID AS memberId FROM AMV_MST_TALK) AS derived 
+		WHERE memberId = #{memberId}
+		)
+		AND (NOT memberId = #{memberId}) AND (NOT access = '교') 
+		ORDER BY grade, daynight, class, name
+	</select>
+
+	<select id="getUserName_in" resultType="String"> <!-- Established -->
+		SELECT 
+		name
+		FROM temp 
+		WHERE memberId=#{memberId} 		
+		LIMIT 1
+	</select>
+	
+	<select id="getUserName" resultType="String"> <!-- Established -->
+		SELECT TOP 1
+		name
+		FROM
+		(SELECT STUD_ID AS memberId, NM_KOR AS name FROM TALK_SLV_MST
+		UNION ALL
+		SELECT EMP_ID AS memberId, NM_KOR AS name FROM AMV_MST_TALK) AS temp
+		WHERE memberId=#{memberId} 
+	</select>
+
+	<select id="getSectionMember_in" resultType="DataMap"> <!-- Established -->
+		SELECT `memberId` FROM temp WHERE department = #{deptcode} AND grade = #{grade} AND class=#{class} AND daynight=#{daynight}
+	</select>
+	
+	<select id="getSectionMember" resultType="DataMap"> <!-- Established -->
+	<!-- 
+	 SELECT
+      memberId
+      FROM (
+
+	  SELECT
+      STUD_ID AS memberId,
+      SCHL_YR AS grade,
+      DEPT_CD AS dept,
+      CLS_DIV AS class,
+      STATE_CD,
+      DAY_TM_CD AS daynight
+      from TALK_SLV_MST
+      WHERE SCHL_YR=#{grade} AND CLS_DIV=#{class} AND DAY_TM_CD =#{daynight} AND DEPT_CD = #{deptcode}
+      
+	  UNION ALL
+	  
+	  SELECT 
+      EMP_ID AS memberId,
+      SCHL_YR AS grade,
+      DEPT_CD AS dept,
+      CLS_DIV AS class,
+      '10' AS STATE_CD,
+      DAY_TM_CD AS daynight
+      from TALK_SLV_ADVISOR
+      WHERE SCHL_YR=#{grade} AND CLS_DIV=#{class} AND DAY_TM_CD=#{daynight} AND DEPT_CD=#{deptcode} AND YR = #{YEAR} AND TERM_CD = #{TERM_CD}
+      
+	  UNION ALL
+      
+	  SELECT
+      EMP_ID AS memberId, 
+      '' AS grade, 
+      REP_DEPT_CD AS dept, 
+      '' AS class, 
+      STATE_CD,
+      '' AS daynight
+      from AMV_MST_TALK 
+
+      WHERE JOB_TP_CD IN ('34', '35') AND (REP_DEPT_CD = (SELECT REP_DEPT_CD FROM COV_DEPT_TALK WHERE DEPT_CD = #{deptcode}) OR DEPT_CD = #{deptcode}) 
+      ) AS temp
+      WHERE STATE_CD = '10'
+	 -->
+
+	SELECT memberId
+  	FROM (
+
+     SELECT STUD_ID     AS memberId,
+           SCHL_YR     AS grade,
+           DEPT_CD     AS dept,
+           CLS_DIV     AS class,
+           STATE_CD,
+           DAY_TM_CD   AS daynight
+      from TALK_SLV_MST
+     WHERE SCHL_YR = #{grade} AND CLS_DIV = #{class} AND DAY_TM_CD = #{daynight} AND DEPT_CD = #{deptcode}
+       AND STATE_CD = '10'
+      
+     UNION ALL
+     
+     SELECT EMP_ID       AS memberId,
+           SCHL_YR      AS grade,
+           DEPT_CD      AS dept,
+           CLS_DIV      AS class,
+           '10'         AS STATE_CD,
+           DAY_TM_CD    AS daynight
+      FROM TALK_SLV_ADVISOR
+     WHERE 
+     SCHL_YR = #{grade} 
+     AND CLS_DIV = #{class} 
+     AND DAY_TM_CD = #{daynight} 
+     AND DEPT_CD = #{deptcode} 
+     AND YR = (SELECT TOP 1 YR FROM TALK_RESET_STD WHERE END_DT > GETDATE() AND GETDATE() > ST_DT) 
+     AND TERM_CD = (SELECT TOP 1 TERM_CD FROM TALK_RESET_STD WHERE END_DT > GETDATE() AND GETDATE() > ST_DT)
+
+    UNION ALL
+        
+    SELECT EMP_ID         AS memberId,
+           ''             AS grade,
+           D1.DEPT_CD     AS dept,
+           ''             AS class,
+           STATE_CD,
+           ''             AS daynight
+      FROM AMV_MST_TALK   D1
+     INNER JOIN COV_DEPT_TALK D2 ON D2.REP_DEPT_CD = D1.REP_DEPT_CD
+       WHERE D1.JOB_TP_CD IN ('34', '35')
+       AND D1.STATE_CD = '10'
+       AND D2.DEPT_CD IN (
+       SELECT DISTINCT DEPT_CD
+       FROM TALK_SLV_MST
+       WHERE STATE_CD = '10' AND DEPT_CD = #{deptcode})
+      ) AS temp
+ 	WHERE STATE_CD = '10'
+	</select>
+
+<!-- 
+SELECT 
+		memberId
+		FROM (select 
+		STUD_ID AS memberId,
+		SCHL_YR AS grade,
+		DEPT_CD AS dept,
+		CLS_DIV AS class,
+		STATE_CD,
+		DAY_TM_CD AS daynight
+		from TALK_SLV_MST
+		WHERE SCHL_YR=#{grade} AND CLS_DIV=#{class} AND DAY_TM_CD = #{daynight} AND DEPT_CD = #{deptcode}
+		UNION ALL
+		select 
+		EMP_ID AS memberId, 
+		'' AS grade, 
+		REP_DEPT_CD AS dept, 
+		'' AS class, 
+		STATE_CD,
+		'' AS daynight
+		from AMV_MST_TALK 
+		WHERE JOB_TP_CD IN ('11', '34', '35') AND (REP_DEPT_CD = (SELECT REP_DEPT_CD FROM COV_DEPT_TALK WHERE DEPT_CD = #{deptcode}) OR DEPT_CD = #{deptcode}) 
+		) AS temp
+		WHERE STATE_CD = '10'
+ -->
+
+	<select id="getDeptMember_in" resultType="DataMap"> <!-- Established -->
+		SELECT `memberId` FROM temp WHERE department = #{deptcode}
+	</select>
+	
+	<select id="getDeptMember" resultType="DataMap"> <!-- Established -->
+	<!-- 
+		SELECT 
+		memberId
+		FROM
+		(SELECT STUD_ID AS memberId, DEPT_CD, REP_DEPT_CD, STATE_CD FROM TALK_SLV_MST
+		WHERE DEPT_CD=#{deptcode}
+		UNION ALL
+		SELECT D1.EMP_ID AS memberId, D2.DEPT_CD, D1.REP_DEPT_CD, D1.STATE_CD
+		FROM AMV_MST_TALK   D1
+		INNER JOIN COV_DEPT_TALK D2 ON D2.DEPT_CD = #{rept} AND D2.REP_DEPT_CD = D1.REP_DEPT_CD
+		WHERE D1.JOB_TP_CD IN ('11', '34', '35')
+		) AS temp
+		WHERE STATE_CD = '10'
+	 -->
+		SELECT memberId
+	  	FROM
+	      (
+	        SELECT STUD_ID AS memberId, DEPT_CD, REP_DEPT_CD, STATE_CD, nm_kor
+	        FROM TALK_SLV_MST
+	        WHERE DEPT_CD = #{deptcode}
+	        AND STATE_CD = '10'
+	         
+	        UNION ALL
+	        
+	        SELECT D1.EMP_ID AS memberId, D2.DEPT_CD, D1.REP_DEPT_CD, D1.STATE_CD, nm_kor
+	        FROM AMV_MST_TALK   D1
+	        INNER JOIN COV_DEPT_TALK D2 ON D2.REP_DEPT_CD = D1.REP_DEPT_CD
+	        WHERE D1.JOB_TP_CD IN ('11', '34', '35')
+	        AND D2.DEPT_CD IN (
+		        SELECT DISTINCT DEPT_CD
+		        FROM TALK_SLV_MST
+		        WHERE STATE_CD = '10'
+		        AND DEPT_CD = #{deptcode}
+	        )
+	        AND D1.STATE_CD = '10'
+	      ) AS temp
+	</select>
+	
+	<select id="getReptCode" resultType="String">
+		SELECT TOP 1 REP_DEPT_CD FROM COV_DEPT_TALK WHERE DEPT_CD=#{dept};
+	</select>
+	
+	<select id="getDeptCache" resultType="DataMap">
+		SELECT * FROM COV_DEPT_TALK
+	</select>
+	
+	<select id="getCourseTaker_in" resultType="DataMap"> <!-- Established -->
+		SELECT `memberId` FROM temp WHERE `memberId` IN (SELECT device_f FROM tempTaking WHERE class_f = #{classcode})
+	</select>
+
+	<select id="getCourseTaker" resultType="DataMap"> <!-- Established -->
+		<!-- 
+		 SELECT STUD_ID AS memberId from TALK_SLV_MST WHERE STUD_ID IN (SELECT STUD_ID FROM SUV_MST_TALK WHERE LECT_CD = #{classcode}) AND STATE_CD='10'
+		 -->
+		SELECT D1.STUD_ID AS memberId
+		FROM SUV_MST_TALK D1
+		WHERE D1.YR = (SELECT TOP 1 YR FROM TALK_RESET_STD WHERE END_DT > GETDATE() AND GETDATE() > ST_DT)
+		AND D1.TERM_CD = (SELECT TOP 1 TERM_CD FROM TALK_RESET_STD WHERE END_DT > GETDATE() AND GETDATE() > ST_DT)
+		AND LECT_CD = #{classcode}
+	</select>
+	
+	<select id="getCourseProf" resultType="DataMap">
+		<!-- 
+		 SELECT EMP_ID AS memberId FROM SOV_PROF_TALK 
+		WHERE 
+		LECT_CD = #{classcode}
+		 -->
+		 SELECT EMP_ID AS memberId
+		 FROM SOV_PROF_TALK
+		 WHERE YR = (SELECT TOP 1 YR FROM TALK_RESET_STD WHERE END_DT > GETDATE() AND GETDATE() > ST_DT)
+		 AND TERM_CD = (SELECT TOP 1 TERM_CD FROM TALK_RESET_STD WHERE END_DT > GETDATE() AND GETDATE() > ST_DT)
+		 AND LECT_CD = #{classcode}
+	</select>
+
+	<select id="getLectures_in" resultType="DataMap"> <!-- Established -->
+		SELECT * FROM tempClass;
+	</select>
+
+	<select id="getLectures" resultType="DataMap"> <!-- Established -->
+		<!-- select LECT_CD AS classcode, CORS_NM AS className from SOV_MST_TALK ORDER BY LECT_CD ASC; -->
+		select LECT_CD AS classcode, CORS_NM AS className from SOV_MST_TALK WHERE YR = (
+  		SELECT TOP 1 YR FROM TALK_RESET_STD WHERE END_DT > GETDATE() AND GETDATE() > ST_DT
+		) AND TERM_CD = (
+		SELECT TOP 1 TERM_CD FROM TALK_RESET_STD WHERE END_DT > GETDATE() AND GETDATE() > ST_DT
+		)
+ 		ORDER BY LECT_CD ASC;
+	</select>
+
+	<select id="getDepts_in" resultType="DataMap"> <!-- Established -->
+		SELECT * FROM tempDept;
+	</select>
+
+	<select id="getDepts" resultType="DataMap"> <!-- Established -->
+		SELECT C.DEPT_CD  AS no
+     , C.DEPT_NM  AS hangleName
+        FROM COV_DEPT_TALK  C
+       WHERE C.ORG_CD = '10'
+         AND C.DEPT_TP_CD = '10'
+         AND C.DEPT_DIV_CD IN ('13', '16')
+	</select>
+	
+	<select id="getDeptReal" resultType="DataMap">
+	SELECT M.DEPT_CD      AS no
+     , T.DEPT_NM      AS hangleName
+     , CASE WHEN M.DAY_TM_CD=10 THEN 0
+            WHEN M.DAY_TM_CD=20 THEN 1
+        END daynight
+     , M.SCHL_YR
+     , M.CLS_DIV
+	  FROM TALK_SLV_MST       M
+	 INNER JOIN COV_DEPT_TALK T ON T.DEPT_CD = M.DEPT_CD
+	 WHERE M.STATE_CD = '10'
+	 GROUP BY M.DEPT_CD, T.DEPT_NM, M.DAY_TM_CD, M.SCHL_YR, M.CLS_DIV
+	</select>
+
+	<select id="getMemberDetail_in" resultType="DataMap"> <!-- Established -->
+		SELECT
+		memberId AS `memberId`, 
+		userAccount AS `userAccount`,
+		grade AS `grade`,
+		department AS `dept`,
+		(SELECT hangleName FROM tempDept WHERE `no`=temp.department LIMIT 1) AS deptName,
+		class AS `class`,
+		CASE 
+		WHEN daynight = '10' THEN '주'
+		WHEN daynight = '20' THEN '야'
+		END daynight,
+		CASE 
+		WHEN access = '학' THEN '학'
+		WHEN access = '조' THEN '조'
+		WHEN access = '교' THEN '교'
+		WHEN access = '직' THEN '직'
+		END access,
+		phone AS `phone`,
+		NAME AS `name`
+		FROM temp
+		WHERE memberId = #{memberId}
+		LIMIT 1
+	</select>
+
+	<select id="getMemberDetail2" resultType = "DataMap">
+		SELECT 
+			* 
+		FROM 
+		(
+			select 
+			NM_KOR AS nickname
+			, STUD_ID AS no
+			from TALK_SLV_MST
+			UNION ALL
+			select 
+			NM_KOR AS nickname
+			, EMP_ID AS no
+			from AMV_MST_TALK
+		) AS temp WHERE no IN (<foreach collection="list" item="item" separator=",">#{item.no}</foreach>)
+	</select>
+
+	<select id="getMemberDetailBulk" resultType="DataMap"> <!-- Established -->
+		SELECT * 
+		FROM (select 
+		STUD_ID AS memberId,
+		STUD_ID AS userAccount,
+		SPASSWORD AS userPassword,
+		SCHL_YR AS grade,
+		DEPT_CD AS dept,
+		(SELECT DEPT_NM FROM COV_DEPT_TALK WHERE COV_DEPT_TALK.DEPT_CD = TALK_SLV_MST.DEPT_CD) AS deptName,
+		CLS_DIV AS class,
+		CASE
+		WHEN DAY_TM_CD='10' THEN '주'
+		WHEN DAY_TM_CD='20' THEN '야'
+		END daynight,
+		MOBILE AS phone,
+		NM_KOR AS name,
+		0 AS tpcd,
+		'학' AS access
+		from TALK_SLV_MST
+		UNION ALL
+		select 
+		EMP_ID AS memberId, 
+		EMP_ID AS userAccount, 
+		SPASSWORD AS userPassword, 
+		'' AS grade, 
+		DEPT_CD AS dept, 
+		(SELECT DEPT_NM FROM COV_DEPT_TALK WHERE COV_DEPT_TALK.DEPT_CD = AMV_MST_TALK.DEPT_CD) AS deptName,
+		'' AS class, 
+		'' AS daynight, 
+		MOBILE AS phone, 
+		NM_KOR AS name,
+		CASE WHEN JOB_TP_CD = '11' THEN 1
+		ELSE 0
+		END tpcd,
+		CASE 
+		WHEN JOB_TP_CD IN ('11','12','13','16','19')  THEN '교'
+		WHEN JOB_TP_CD IN ('34','35')  THEN '조'
+		ELSE '직'
+		END access
+		from AMV_MST_TALK) AS temp WHERE memberId IN (<foreach collection="list" item="item" separator=",">#{item.no}</foreach>)
+	</select>
+	
+	<select id="getMemberDetail" resultType="DataMap"> <!-- Established -->
+		SELECT * 
+		FROM (select 
+		STUD_ID AS memberId,
+		STUD_ID AS userAccount,
+		SPASSWORD AS userPassword,
+		SCHL_YR AS grade,
+		DEPT_CD AS dept,
+		(SELECT DEPT_NM FROM COV_DEPT_TALK WHERE COV_DEPT_TALK.DEPT_CD = TALK_SLV_MST.DEPT_CD) AS deptName,
+		CLS_DIV AS class,
+		CASE
+		WHEN DAY_TM_CD='10' THEN '주'
+		WHEN DAY_TM_CD='20' THEN '야'
+		END daynight,
+		MOBILE AS phone,
+		NM_KOR AS name,
+		0 AS tpcd,
+		'학' AS access
+		from TALK_SLV_MST
+		UNION ALL
+		select 
+		EMP_ID AS memberId, 
+		EMP_ID AS userAccount, 
+		SPASSWORD AS userPassword, 
+		'' AS grade, 
+		DEPT_CD AS dept, 
+		(SELECT DEPT_NM FROM COV_DEPT_TALK WHERE COV_DEPT_TALK.DEPT_CD = AMV_MST_TALK.DEPT_CD) AS deptName,
+		'' AS class, 
+		'' AS daynight, 
+		MOBILE AS phone, 
+		NM_KOR AS name,
+		CASE WHEN JOB_TP_CD = '11' THEN 1
+		ELSE 0
+		END tpcd,
+		CASE 
+		WHEN JOB_TP_CD IN ('11','12','13','16','19')  THEN '교'
+		WHEN JOB_TP_CD IN ('34','35')  THEN '조'
+		ELSE '직'
+		END access
+		from AMV_MST_TALK) AS temp WHERE memberId = #{memberId}
+	</select>
+
+	<select id="getMemberId_in" resultType="String"> <!-- Established -->
+		SELECT 
+		CASE 
+		WHEN COUNT(*) > 0 THEN memberId 
+		ELSE 0 
+		END memberId 
+		FROM temp 
+		WHERE userAccount=#{userAccount} AND userPassword=#{userPassword} 		
+		LIMIT 1
+    </select>
+
+	<select id="getMemberIdDev" resultType="String"> <!-- Established -->
+		SELECT 
+		CASE WHEN COUNT(*) > 0 THEN memberId
+		ELSE 0
+		END memberId
+		FROM
+		(SELECT STUD_ID AS memberId, STUD_ID AS userAccount, SPASSWORD AS userPassword FROM TALK_SLV_MST
+		UNION ALL
+		SELECT EMP_ID AS memberId, EMP_ID AS userAccount, SPASSWORD AS userPassword FROM AMV_MST_TALK) AS temp
+		WHERE userAccount = #{userAccount} GROUP BY memberId
+    </select>
+
+	<select id="getMemberId" resultType="String"> <!-- Established -->
+		SELECT 
+		CASE WHEN COUNT(*) > 0 THEN memberId
+		ELSE 0
+		END memberId
+		FROM
+		(SELECT STUD_ID AS memberId, STUD_ID AS userAccount, SPASSWORD AS userPassword FROM TALK_SLV_MST
+		UNION ALL
+		SELECT EMP_ID AS memberId, EMP_ID AS userAccount, SPASSWORD AS userPassword FROM AMV_MST_TALK) AS temp
+		WHERE userAccount = #{userAccount} AND userPassword=HASHBYTES('sha2_256', cast(#{userPassword} as VARCHAR)) GROUP BY memberId
+    </select>
+
+	<select id="getHashByte" resultType="String">
+		SELECT HASHBYTES('sha2_256', #{pwd})
+	</select>
+
+	<select id="getPhoneNumber_in" resultType="DataMap"> <!-- Established -->
+		SELECT 
+		phone, name
+		FROM temp 
+		WHERE memberId=#{memberId} 		
+		LIMIT 1
+    </select>
+
+	<select id="getPhoneNumber" resultType="DataMap"> <!-- Established -->
+		SELECT * 
+		FROM
+		(SELECT STUD_ID AS memberId, MOBILE AS phone, NM_KOR AS name FROM TALK_SLV_MST
+		UNION ALL
+		SELECT EMP_ID AS memberId, MOBILE AS phone, NM_KOR AS name FROM AMV_MST_TALK) AS temp
+		WHERE memberId = #{memberId}
+    </select>
+
+	<select id="getClassName_in" resultType="String"> <!-- Established -->
+		SELECT className FROM tempClass WHERE classcode = #{classcode} LIMIT 1
+	</select>
+	
+	<select id="getClassName" resultType="String"> <!-- Established -->
+		select TOP 1 CORS_NM AS className from SOV_MST_TALK WHERE LECT_CD = #{classcode}
+	</select>
+	
+	<select id="getDeptName_in" resultType="String"> <!-- Established -->
+		SELECT hangleName FROM tempDept WHERE no = #{deptcode} LIMIT 1
+	</select>
+
+	<select id="getDeptName" resultType="String"> <!-- Established -->
+		select TOP 1 DEPT_NM AS hangleName from COV_DEPT_TALK WHERE DEPT_CD = #{deptcode}
+	</select>
+
+</mapper>

@@ -1,0 +1,97 @@
+
+Quartz has started to run - 2017-03-05 00:30:00
+Quartz has done normally - 2017-03-05 00:31:55
+Quartz has started to run - 2017-03-05 01:30:00
+Quartz has done normally - 2017-03-05 01:38:16
+Quartz has done normally - 2017-03-05 01:51:08
+Quartz has started to run - 2017-03-05 02:31:57
+Quartz has done normally - 2017-03-05 02:48:46
+Quartz has started to run - 2017-03-05 03:30:00
+Quartz has done normally - 2017-03-05 03:59:10
+Quartz has started to run - 2017-03-05 04:30:00
+Quartz has done normally - 2017-03-05 04:49:54
+Quartz has started to run - 2017-03-05 05:30:00
+An error Occured - 2017-03-05 06:58:07 
+ StackTrace >> 
+org.springframework.dao.DataAccessResourceFailureException: 
+### Error querying database.  Cause: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 4,678,488 milliseconds ago.  The last packet sent successfully to the server was 4,678,488 milliseconds ago.
+### The error may exist in file [C:\Users\a\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp2\wtpwebapps\djTalk\WEB-INF\classes\com\appg\djTalk\mybatis\external\query\ExCommMapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT `memberId` FROM temp WHERE department = ? AND grade = ? AND class=? AND daynight=?
+### Cause: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 4,678,488 milliseconds ago.  The last packet sent successfully to the server was 4,678,488 milliseconds ago.
+; SQL []; Communications link failure
+
+The last packet successfully received from the server was 4,678,488 milliseconds ago.  The last packet sent successfully to the server was 4,678,488 milliseconds ago.; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 4,678,488 milliseconds ago.  The last packet sent successfully to the server was 4,678,488 milliseconds ago.
+Quartz has started to run - 2017-03-05 06:58:24
+Quartz has done normally - 2017-03-05 07:19:07
+Quartz has started to run - 2017-03-05 07:30:00
+Quartz has done normally - 2017-03-05 07:51:05
+Quartz has started to run - 2017-03-05 08:30:00
+Quartz has done normally - 2017-03-05 08:47:26
+Quartz has started to run - 2017-03-05 10:48:16
+Quartz has done normally - 2017-03-05 11:10:26
+Quartz has started to run - 2017-03-05 11:30:00
+Quartz has done normally - 2017-03-05 11:48:12
+Quartz has started to run - 2017-03-05 12:30:00
+Quartz has done normally - 2017-03-05 12:48:33
+Quartz has started to run - 2017-03-05 13:35:29
+Quartz has done normally - 2017-03-05 14:06:01
+Quartz has started to run - 2017-03-05 14:30:00
+An error Occured - 2017-03-05 15:40:42 
+ StackTrace >> 
+org.springframework.dao.DataAccessResourceFailureException: 
+### Error querying database.  Cause: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 3,895,686 milliseconds ago.  The last packet sent successfully to the server was 3,895,686 milliseconds ago.
+### The error may exist in file [C:\Users\a\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp2\wtpwebapps\djTalk\WEB-INF\classes\com\appg\djTalk\mybatis\core\query\CommMapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT device_f, room_f FROM tblChatMember WHERE room_f = ?
+### Cause: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 3,895,686 milliseconds ago.  The last packet sent successfully to the server was 3,895,686 milliseconds ago.
+; SQL []; Communications link failure
+
+The last packet successfully received from the server was 3,895,686 milliseconds ago.  The last packet sent successfully to the server was 3,895,686 milliseconds ago.; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 3,895,686 milliseconds ago.  The last packet sent successfully to the server was 3,895,686 milliseconds ago.
+Quartz has started to run - 2017-03-05 15:40:45
+Quartz has done normally - 2017-03-05 16:02:01
+Quartz has started to run - 2017-03-05 16:30:00
+An error Occured - 2017-03-05 17:27:56 
+ StackTrace >> 
+org.springframework.dao.DataAccessResourceFailureException: 
+### Error querying database.  Cause: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 2,805,213 milliseconds ago.  The last packet sent successfully to the server was 2,805,213 milliseconds ago.
+### The error may exist in file [C:\Users\a\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp2\wtpwebapps\djTalk\WEB-INF\classes\com\appg\djTalk\mybatis\core\query\CommMapper.xml]
+### The error may involve defaultParameterMap
+### The error occurred while setting parameters
+### SQL: SELECT device_f, room_f FROM tblChatMember WHERE room_f = ?
+### Cause: com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 2,805,213 milliseconds ago.  The last packet sent successfully to the server was 2,805,213 milliseconds ago.
+; SQL []; Communications link failure
+
+The last packet successfully received from the server was 2,805,213 milliseconds ago.  The last packet sent successfully to the server was 2,805,213 milliseconds ago.; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet successfully received from the server was 2,805,213 milliseconds ago.  The last packet sent successfully to the server was 2,805,213 milliseconds ago.
+Quartz has started to run - 2017-03-05 17:30:00
+Quartz has done normally - 2017-03-05 17:53:50
+Quartz has started to run - 2017-03-05 18:57:38
+Quartz has done normally - 2017-03-05 19:16:43
+Quartz has started to run - 2017-03-05 19:30:00
+Quartz has done normally - 2017-03-05 19:51:09
+Quartz has started to run - 2017-03-05 20:30:00
+Quartz has done normally - 2017-03-05 20:48:51
+Quartz has started to run - 2017-03-05 21:53:27
+Quartz has done normally - 2017-03-05 22:16:47
+Quartz has started to run - 2017-03-05 22:30:00
+Quartz has done normally - 2017-03-05 22:47:56

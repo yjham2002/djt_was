@@ -1,0 +1,7 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+.bg_popup{padding:20px; background:#ffffff;}
+.bg_popup h1{font-size:24px; color:#1451ad; letter-spacing:-1px; margin:0 0 0px 0; font-weight: bold; padding-bottom:10px;}
+.bg_popup table.datacList{width:100%;}

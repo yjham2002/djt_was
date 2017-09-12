@@ -1,0 +1,33 @@
+
+Quartz has started to run - 2017-03-22 15:53:00
+Quartz has done normally - 2017-03-22 15:53:28
+Quartz has started to run - 2017-03-22 15:59:00
+Quartz has done normally - 2017-03-22 15:59:19
+Quartz has started to run - 2017-03-22 16:00:00
+Quartz has done normally - 2017-03-22 16:00:26
+Quartz has started to run - 2017-03-22 16:14:00
+Quartz has done normally - 2017-03-22 16:14:25
+Quartz has started to run - 2017-03-22 16:15:02
+Quartz has done normally - 2017-03-22 16:15:27
+Quartz has started to run - 2017-03-22 16:20:00
+Quartz has done normally - 2017-03-22 16:20:00
+Quartz has started to run - 2017-03-22 16:21:00
+Quartz has done normally - 2017-03-22 16:21:21
+Quartz has started to run - 2017-03-22 16:23:00
+Quartz has done normally - 2017-03-22 16:23:21
+Quartz has started to run - 2017-03-22 16:33:00
+Quartz has done normally - 2017-03-22 16:33:19
+Quartz has started to run - 2017-03-22 16:36:00
+Quartz has done normally - 2017-03-22 16:36:01
+Quartz has started to run - 2017-03-22 16:47:00
+Quartz has done normally - 2017-03-22 16:47:17
+Quartz has started to run - 2017-03-22 16:51:00
+Quartz has done normally - 2017-03-22 16:51:01
+Quartz has started to run - 2017-03-22 17:51:00
+Quartz has done normally - 2017-03-22 17:51:19
+Quartz has started to run - 2017-03-22 17:55:00
+An error Occured - 2017-03-22 17:55:00 
+ StackTrace >> 
+org.apache.ibatis.binding.BindingException: Mapper method 'getBoardMaxSequence' (interface com.appg.djTalk.mybatis.core.mapper.CommMapper) attempted to return null from a method with a primitive return type (int).
+Quartz has started to run - 2017-03-22 18:07:00
+Quartz has done normally - 2017-03-22 18:07:23

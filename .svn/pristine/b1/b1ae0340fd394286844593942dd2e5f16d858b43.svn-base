@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.appg.djTalk.mybatis.core.mapper.CommMapper">
+
+	<insert id="insertBoard" parameterType="DataMap">
+		INSERT INTO tblPublic(`type`, `title`, `message`, filterType, mType, regDate) 
+		VALUES(
+		1, #{title}, #{content}, 0, #{seq}, NOW()
+		)
+	</insert>
+
+	<select id="getRegKeyWake" resultType="DataMap">
+		SELECT no, deviceType, regKey, vibration, notifyWithSound, notificationSound
+		FROM tblDevice 
+		WHERE 
+		NO IN (<foreach collection="list" item="item" separator=",">#{item.no}</foreach>)
+	</select>
+	
+	<select id="getMaxSequence" resultType="Integer">
+		SELECT MAX(mType) FROM tblPublic
+	</select>
+
+	<select id="getRegKeyAll" resultType="DataMap">
+		SELECT deviceType, regKey, vibration, notifyWithSound, notificationSound
+		FROM tblDevice 
+		WHERE 
+		allowPush = 1
+		AND
+		(
+		noDisturb = 1
+		OR
+			( 
+			noDisturb = 2
+			AND
+			(
+			(disturbEnd > disturbStart AND NOT TIME(NOW()) BETWEEN disturbStart AND disturbEnd)
+			OR
+			(disturbStart > disturbEnd AND TIME(NOW()) BETWEEN disturbStart AND disturbEnd)
+			)
+			)
+		)
+	</select>
+	
+	<select id="getRegKeyList" resultType="DataMap">
+		SELECT deviceType, regKey, vibration, notifyWithSound, notificationSound
+		FROM tblDevice 
+		WHERE 
+		allowPush = 1
+		AND
+		(
+		noDisturb = 1
+		OR
+			( 
+			noDisturb = 2
+			AND
+			(
+			(disturbEnd > disturbStart AND NOT TIME(NOW()) BETWEEN disturbStart AND disturbEnd)
+			OR
+			(disturbStart > disturbEnd AND TIME(NOW()) BETWEEN disturbStart AND disturbEnd)
+			)
+			)
+		)
+		AND NO IN (<foreach collection="list" item="item" separator=",">#{item.no}</foreach>)
+	</select>
+
+	<insert id="insertChatHistory" parameterType="DataMap">
+		INSERT INTO `tblChatHistory`
+            (
+            `roomId`,
+             `data`,
+             `mtime`,
+             `regDate`
+             )
+		VALUES (
+		#{roomId},
+        #{data},
+       	#{mtime},
+      	NOW()
+      	)
+	</insert>
+
+	<select id="isUserExisting" resultType="int">
+		SELECT COUNT(*) FROM tblDevice WHERE `no` = #{memberId}
+	</select>
+
+	<select id="getPrivateChatId" resultType="String">
+		SELECT roomId FROM tblChatRoom WHERE `no` = (SELECT room_f 
+		FROM 
+		(
+		SELECT * 
+		FROM tblChatMember 
+		WHERE 
+		room_f IN (SELECT `no` FROM tblChatRoom WHERE `type`='CO' AND state=1) AND 
+		room_f IN (SELECT room_f FROM tblChatMember WHERE device_f = #{memberId})
+		) 
+		AS filtered 
+		WHERE device_f = #{memberIdo} LIMIT 1)
+	</select>
+
+	<select id="isRedundantCounselling" resultType="int">
+		SELECT COUNT(*) 
+		FROM 
+		(
+		SELECT * 
+		FROM tblChatMember 
+		WHERE 
+		room_f IN (SELECT `no` FROM tblChatRoom WHERE `type`='CO' AND state=1) AND 
+		room_f IN (SELECT room_f FROM tblChatMember WHERE device_f = #{memberId})
+		) 
+		AS filtered 
+	</select>
+
+	<select id="isAlreadyOngoing" resultType="String">
+		SELECT device_f AS ids
+		FROM 
+		(
+		SELECT * 
+		FROM tblChatMember 
+		WHERE 
+		room_f IN (SELECT `no` FROM tblChatRoom WHERE `type`='CO' AND state=1) AND 
+		room_f IN (SELECT room_f FROM tblChatMember WHERE device_f = #{memberId})
+		) 
+		AS filtered 
+		WHERE NOT device_f = #{memberId}
+	</select>
+
+	<select id="getChatMemberPair" resultType="DataMap">
+		SELECT device_f, room_f FROM tblChatMember WHERE room_f = #{roomId}
+	</select>
+
+	<update id="invalidateRoom">
+		UPDATE tblChatRoom SET state = 2 WHERE roomId = #{rid}
+	</update>
+
+	<insert id="setMember">
+		INSERT INTO tblChatMember(device_f, room_f, regDate) SELECT #{device}, #{roomNo}, NOW() 
+		FROM DUAL WHERE NOT EXISTS(SELECT * FROM tblChatMember WHERE device_f = #{device} AND room_f = #{roomNo}) LIMIT 1
+	</insert>
+
+	<select id="getRoomNumber" parameterType="String" resultType="int">
+		SELECT `no` FROM tblChatRoom WHERE roomId = #{roomId};
+	</select>
+
+	<insert id="createRoom" parameterType = "DataMap">
+		INSERT INTO `tblChatRoom`
+            (
+             `desc`,
+             `roomId`,
+             `type`,
+             `pref_dept`,
+             `pref_section`,
+             `pref_class`,
+             `pref_daynight`,
+             `pref_grade`,
+             `regDate`)
+		VALUES (
+        #{desc},
+        #{roomId},
+        #{type},
+        #{pref_dept},
+        #{pref_section},
+       	#{pref_class},
+        #{pref_daynight},
+        #{pref_grade},
+        NOW());
+	</insert>
+	
+	<select id="getMemberIds" resultType="DataMap">
+	SELECT `no` FROM tblDevice
+	</select>
+
+	<delete id="deleteSpecMember">
+		DELETE FROM tblChatMember WHERE room_f = #{roomNo} AND device_f = #{device}
+	</delete>
+
+	<delete id="deleteMember">
+		DELETE FROM tblChatMember WHERE room_f = (SELECT `no` FROM tblChatRoom WHERE roomId = #{roomId})
+	</delete>
+
+	<select id="getCurrentRooms" resultType="DataMap">
+		SELECT * FROM tblChatRoom WHERE NOT `type` = 'CO'
+	</select>
+	
+	<delete id="deleteRoom">
+		DELETE FROM tblChatRoom WHERE roomId=#{roomId}
+	</delete>
+
+	<select id="getTodayList" resultType = "DataMap">
+		SELECT *
+		FROM tblPublic LEFT JOIN tblMultimedia ON tblMultimedia.no = multi_f
+		WHERE 
+		(filterType = 0 OR (filterType = 5 AND filter_f = #{memberId})) 
+		AND tblPublic.type = #{type} AND tblPublic.no > #{lastRead}
+		ORDER BY tblPublic.regDate ASC
+		LIMIT #{limit}
+		<!-- NEED TO BE MODIFIED -->
+	</select>
+	
+	<select id="getTodayListInfinite" resultType = "DataMap">
+		SELECT *
+		FROM tblPublic LEFT JOIN tblMultimedia ON tblMultimedia.no = multi_f
+		WHERE 
+		(filterType = 0 OR (filterType = 5 AND filter_f = #{memberId})) 
+		AND tblPublic.type = #{type} AND tblPublic.no > #{lastRead}
+		ORDER BY tblPublic.regDate ASC
+		<!-- NEED TO BE MODIFIED -->
+	</select>
+	
+	<select id="getTodayLast" resultType = "DataMap">
+		SELECT *
+		FROM tblPublic LEFT JOIN tblMultimedia ON tblMultimedia.no = multi_f
+		WHERE 
+		(filterType = 0 OR (filterType = 5 AND filter_f = #{memberId})) 
+		AND tblPublic.type = #{type}
+		ORDER BY tblPublic.regDate DESC
+		LIMIT 1
+		<!-- NEED TO BE MODIFIED -->
+	</select>
+	
+	<select id="getRoomDetail" resultType="DataMap">
+		SELECT * FROM tblChatRoom WHERE `no`= #{rNo}
+	</select>
+	
+	<select id="getAvailableRooms" resultType="DataMap">
+		SELECT * 
+		FROM tblChatRoom 
+		WHERE tblChatRoom.no IN (SELECT room_f FROM tblChatMember WHERE device_f = #{memberId}) AND state = 1
+		ORDER BY (
+		CASE TYPE 
+		WHEN 'CO' THEN 1
+		WHEN 'DP' THEN 2
+		WHEN 'DS' THEN 3
+		WHEN 'CL' THEN 4
+		ELSE 5 END
+		)
+	</select>
+
+	<select id="getUserList" resultType = "DataMap">
+		SELECT *
+		FROM tblDevice
+		WHERE no in (<foreach collection="list" item="item" separator=",">#{item}</foreach>)
+		ORDER BY no ASC
+	</select>
+	
+	<select id="getUserListOfRoom" resultType = "DataMap">
+		SELECT * FROM tblDevice 
+		WHERE tblDevice.no IN (SELECT device_f FROM tblChatMember WHERE room_f = #{room}) 
+		ORDER BY tblDevice.no ASC
+	</select>	
+
+	<select id="hasAlreadyRegistered" resultType="int">
+    	SELECT COUNT(*)
+		FROM tblDevice 
+		WHERE no=#{memberId}
+		LIMIT 1
+    </select>
+    
+    <select id="getMultiMedia" resultType="DataMap">
+    	SELECT * FROM tblMultimedia WHERE no = #{mf}
+    </select>
+
+	<select id="getCurrentRegKey" resultType="String">
+    	SELECT regKey
+		FROM tblDevice 
+		WHERE no=#{memberId}
+		LIMIT 1
+    </select>
+
+	<select id="getUser" parameterType = "DataMap" resultType="DataMap">
+		SELECT * 
+		FROM tblDevice 
+		WHERE no=#{memberId}
+		LIMIT 1
+	</select>
+
+	<insert id = "registerNewly" parameterType = "DataMap">
+	    INSERT INTO tblDevice(
+	    	deviceId,
+	    	deviceType,
+	    	allowPush,
+	    	no,
+	    	nickname,
+	    	regDate
+	    ) VALUES (
+	    	#{deviceId},
+	    	#{deviceType},
+	    	#{allowPush},
+	    	#{no},
+	    	#{name},
+	    	NOW()
+	    )
+	</insert>
+	
+	<insert id = "logFile" parameterType = "DataMap" useGeneratedKeys="true" keyProperty="no">
+	    INSERT INTO tblMultimedia(
+	    	device_f,
+	    	room_f,
+	    	mediaPath,
+	    	originalName,
+	    	extension,
+	    	size,
+	    	type,
+	    	regDate
+	    ) VALUES (
+	    	#{memberId},
+	    	#{room},
+	    	#{mediaPath},
+	    	#{originalName},
+	    	#{extension},
+	    	#{size},
+	    	#{type},
+	    	NOW()
+	    )
+	</insert>
+
+<!-- 
+	<insert id = "logFileBulk" parameterType = "DataMap" useGeneratedKeys="true" keyProperty="no" keyColumn="no">
+	    INSERT INTO tblMultimedia(
+	    	mediaPath,
+	    	originalName,
+	    	extension,
+	    	size,
+	    	type,
+	    	regDate
+	    ) VALUES 
+	    <foreach collection="saveList" item="item" open="(" separator="),(" close=")">
+	    	#{item.mediaPath}
+	    	, #{item.originalName}
+	    	, #{item.extension}
+	    	, #{item.size}
+	    	, #{item.type}
+	    	, NOW()
+	    </foreach>
+	</insert>
+ -->
+	
+	<update id="updateUser" parameterType="DataMap">
+		UPDATE tblDevice
+		SET
+			deviceId = #{deviceId}, 
+			deviceType = #{deviceType},
+			allowPush = #{allowPush},
+			regKey = #{regKey},
+			prevRegKey = #{prevRegKey},
+			appVersion = #{appVersion},
+			lastIp = #{lastIp},
+			lastLogin = NOW(),
+			`update` = NOW() 
+		WHERE no = #{no}
+	</update>
+
+	<update id="updateUserIntro" parameterType="DataMap">
+		UPDATE tblDevice
+		SET
+			deviceId = #{deviceId}, 
+			regKey = #{regKey},
+			prevRegKey = #{prevRegKey},
+			appVersion = #{appVersion},
+			lastIp = #{lastIp},
+			lastLogin = NOW(),
+			`update` = NOW() 
+		WHERE no = #{no}
+	</update>
+
+	<update id="pushToggle">
+		UPDATE tblDevice 
+		SET allowPush = CASE
+		WHEN allowPush=1 THEN 2
+		ELSE 1 END
+		WHERE `no`=#{memberId}
+	</update>
+	
+	<update id="setVibration">
+		UPDATE tblDevice 
+		SET vibration = #{mode}
+		WHERE `no`=#{memberId}
+	</update>
+	
+	<update id="setNotiSound">
+		UPDATE tblDevice 
+		SET notificationSound = #{mode}
+		WHERE `no`=#{memberId}
+	</update>
+	
+	<update id="soundToggle">
+		UPDATE tblDevice 
+		SET notifyWithSound = CASE
+		WHEN notifyWithSound=0 THEN 1
+		ELSE 0 END
+		WHERE `no`=#{memberId}
+	</update>
+	
+	<select id="getPushState" resultType="int">
+    	SELECT allowPush
+		FROM tblDevice 
+		WHERE no=#{memberId}
+		LIMIT 1
+    </select>
+    
+    <select id="getNSoundState" resultType="int">
+    	SELECT notifyWithSound
+		FROM tblDevice 
+		WHERE no=#{memberId}
+		LIMIT 1
+    </select>
+    
+    <update id="setDisturb">
+		UPDATE tblDevice
+		SET noDisturb = 2, disturbStart = #{start}, disturbEnd = #{end}
+		WHERE `no` = #{memberId}
+	</update>
+
+	<update id="offDisturb">
+		UPDATE tblDevice
+		SET noDisturb = 1
+		WHERE `no` = #{memberId}
+	</update>
+	
+	<select id="getDisturbState" resultType="DataMap">
+    	SELECT noDisturb, disturbStart, disturbEnd
+		FROM tblDevice 
+		WHERE no=#{memberId}
+		LIMIT 1
+    </select>
+
+	<update id="setProfile" parameterType="DataMap">
+		UPDATE tblDevice
+		SET
+			nickname = #{nickName}, 
+			profile_f = #{profile}
+		WHERE no = #{memberId}
+	</update>
+	
+	<update id="setProfileNoProfile" parameterType="DataMap">
+		UPDATE tblDevice
+		SET
+			nickname = #{nickName}
+		WHERE no = #{memberId}
+	</update>
+
+	<!-- Previous -->
+
+
+</mapper>
